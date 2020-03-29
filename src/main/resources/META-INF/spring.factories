@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.pig4cloud.plugin.excel.ResponseExcelAutoConfiguration
+    com.pig4cloud.plugin.excel.ResponseExcelAutoConfiguration,\
+    com.pig4cloud.plugin.excel.aop.DynamicNameAspect

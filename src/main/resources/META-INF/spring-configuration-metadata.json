@@ -1,10 +1,18 @@
 {
-  "properties": [
+  "groups": [
     {
-      "name": "excel.template.path",
-      "type": "java.lang.String",
-      "description": "模板路径",
-      "defaultValue": "classpath:templates/excel"
+      "name": "excel",
+      "type": "com.pig4cloud.plugin.excel.config.ExcelConfigProperties",
+      "sourceType": "com.pig4cloud.plugin.excel.config.ExcelConfigProperties"
     }
   ],
+  "properties": [
+    {
+      "name": "excel.template-path",
+      "type": "java.lang.String",
+      "sourceType": "com.pig4cloud.plugin.excel.config.ExcelConfigProperties",
+      "description": "模板路径 默认resources目录下的excel文件夹",
+      "defaultValue": "excel"
+    }
+  ]
 }

@@ -1,5 +1,7 @@
 package com.pig4cloud.plugin.excel.annotation;
 
+import com.alibaba.excel.converters.Converter;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.handler.WriteHandler;
 
 import java.lang.annotation.*;
@@ -26,7 +28,14 @@ public @interface ResponseExcel {
 	 *
 	 * @return string
 	 */
-	String suffix() default ".xlsx";
+	ExcelTypeEnum suffix() default ExcelTypeEnum.XLSX;
+
+	/**
+	 * 文件密码
+	 *
+	 * @return password
+	 */
+	String password() default "";
 
 	/**
 	 * sheel 名称，支持多个
@@ -34,6 +43,13 @@ public @interface ResponseExcel {
 	 * @return String[]
 	 */
 	String[] sheet() default {};
+
+	/**
+	 * 内存操作
+	 *
+	 * @return
+	 */
+	boolean inMemory() default false;
 
 	/**
 	 * excel  模板
@@ -63,5 +79,12 @@ public @interface ResponseExcel {
 	 * @return WriteHandler[]
 	 */
 	Class<? extends WriteHandler>[] writeHandler() default {};
+
+	/**
+	 * 转换器
+	 *
+	 * @return Converter[]
+	 */
+	Class<? extends Converter>[] converter() default {};
 
 }

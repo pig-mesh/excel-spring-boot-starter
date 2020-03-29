@@ -1,13 +1,11 @@
-package com.pig4cloud.plugin.excel.handler;
+package com.pig4cloud.plugin.excel.aop;
 
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
+import com.pig4cloud.plugin.excel.handler.SheetWriteHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -15,8 +13,6 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -25,7 +21,10 @@ import java.util.List;
  * @author lengleng
  */
 @Slf4j
+@RequiredArgsConstructor
 public class ResponseExcelReturnValueHandler implements HandlerMethodReturnValueHandler {
+	private final List<SheetWriteHandler> sheetWriteHandlerList;
+
 
 	/**
 	 * 只处理@ResponseExcel 声明的方法
@@ -65,29 +64,11 @@ public class ResponseExcelReturnValueHandler implements HandlerMethodReturnValue
 			response.getWriter().flush();
 			return;
 		}
-		List list = (List) o;
-		String fileName = String.format("%s_%s%s"
-			, URLEncoder.encode(responseExcel.name(), "UTF-8")
-			, LocalDateTime.now(), responseExcel.suffix());
-		response.setContentType("application/vnd.ms-excel");
-		response.setCharacterEncoding("utf-8");
-		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
 
-		// 若是多sheet List<List<>>
-		if (list.get(0) instanceof List) {
-			ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()
-				, ((List) list.get(0)).get(0).getClass()).build();
-			String[] sheets = responseExcel.sheet();
-			for (int i = 0; i < sheets.length; i++) {
-				//创建sheet
-				WriteSheet sheet = EasyExcel.writerSheet(i, sheets[i]).build();
-				// 写入sheet
-				excelWriter.write((List) list.get(i), sheet);
+		sheetWriteHandlerList.forEach(handler -> {
+			if (handler.support(o)) {
+				handler.export(o, response, responseExcel);
 			}
-			excelWriter.finish();
-		} else {
-			EasyExcel.write(response.getOutputStream(), list.get(0)
-				.getClass()).sheet(responseExcel.sheet()[0]).doWrite(list);
-		}
+		});
 	}
 }
