@@ -52,14 +52,15 @@ public class ManySheetWriteHandler implements SheetWriteHandler {
 	@Override
 	@SneakyThrows
 	public void export(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
-		List list = (List) obj;
+		List objList = (List) obj;
+		List eleList = (List) objList.get(0);
 		String name = ExcelNameContextHolder.get();
 		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
 		response.setContentType("application/vnd.ms-excel");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
 
-		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0)
+		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), eleList.get(0)
 			.getClass()).autoCloseStream(true).excelType(responseExcel.suffix()).inMemory(responseExcel.inMemory());
 
 		if (StringUtils.hasText(responseExcel.password())) {
@@ -100,7 +101,7 @@ public class ManySheetWriteHandler implements SheetWriteHandler {
 				sheet = EasyExcel.writerSheet(i).build();
 			}
 			// 写入sheet
-			excelWriter.write((List) list.get(i), sheet);
+			excelWriter.write((List) objList.get(i), sheet);
 		}
 		excelWriter.finish();
 	}
