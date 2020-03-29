@@ -1,0 +1,3 @@
+excel:
+  template:
+    path: 'classpath:templates/excel'
