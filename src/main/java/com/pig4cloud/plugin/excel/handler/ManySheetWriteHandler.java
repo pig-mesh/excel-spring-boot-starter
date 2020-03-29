@@ -88,18 +88,25 @@ public class ManySheetWriteHandler implements SheetWriteHandler {
 		}
 
 		String[] sheets = responseExcel.sheet();
+		if (StringUtils.hasText(responseExcel.template())) {
+			ClassPathResource classPathResource = new ClassPathResource(configProperties.getTemplatePath()
+				+ File.separator + responseExcel.template());
+			InputStream inputStream = classPathResource.getInputStream();
+			writerBuilder.withTemplate(inputStream);
+		}
+
 		ExcelWriter excelWriter = writerBuilder.build();
+
+
 		for (int i = 0; i < sheets.length; i++) {
 			//创建sheet
-			WriteSheet sheet = EasyExcel.writerSheet(i, sheets[i]).build();
-
+			WriteSheet sheet = null;
 			if (StringUtils.hasText(responseExcel.template())) {
-				ClassPathResource classPathResource = new ClassPathResource(configProperties.getTemplatePath()
-					+ File.separator + responseExcel.template());
-				InputStream inputStream = classPathResource.getInputStream();
-				writerBuilder.withTemplate(inputStream);
 				sheet = EasyExcel.writerSheet(i).build();
+			} else {
+				sheet = EasyExcel.writerSheet(i, sheets[i]).build();
 			}
+
 			// 写入sheet
 			excelWriter.write((List) objList.get(i), sheet);
 		}
