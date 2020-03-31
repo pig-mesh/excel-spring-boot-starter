@@ -11,9 +11,9 @@ import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
 import com.pig4cloud.plugin.excel.kit.ExcelNameContextHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,8 +27,8 @@ import java.util.List;
  * @author lengleng
  * @date 2020/3/29
  */
-@Component
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class ManySheetWriteHandler implements SheetWriteHandler {
 	private final ExcelConfigProperties configProperties;
 

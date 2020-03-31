@@ -13,7 +13,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -29,7 +28,6 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
-@ComponentScan("com.pig4cloud.plugin.excel.handler")
 @EnableConfigurationProperties(ExcelConfigProperties.class)
 public class ResponseExcelAutoConfiguration implements ApplicationContextAware, InitializingBean {
 	private ApplicationContext applicationContext;
