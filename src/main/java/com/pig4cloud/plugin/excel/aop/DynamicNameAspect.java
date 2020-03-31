@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/3/29
  */
 @Aspect
-@Configuration
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class DynamicNameAspect {
 	private final NameProcessor processor;
 
