@@ -62,6 +62,14 @@
 			<artifactId>easyexcel</artifactId>
 			<version>2.1.6</version>
 		</dependency>
+
+		<!-- mica-auto -->
+		<dependency>
+			<groupId>net.dreamlu</groupId>
+			<artifactId>mica-auto</artifactId>
+			<version>1.2.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
