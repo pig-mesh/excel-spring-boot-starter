@@ -8,18 +8,16 @@ import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
-import com.pig4cloud.plugin.excel.kit.ExcelNameContextHolder;
+import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +29,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
-public class SingleSheetWriteHandler implements SheetWriteHandler {
+public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 	private final ExcelConfigProperties configProperties;
 
 	/**
@@ -44,25 +42,16 @@ public class SingleSheetWriteHandler implements SheetWriteHandler {
 	public boolean support(Object obj) {
 		if (obj instanceof List) {
 			List objList = (List) obj;
-			if (objList.get(0) instanceof List) {
-				return false;
-			} else {
-				return true;
-			}
+			return !(objList.get(0) instanceof List);
+		} else {
+			throw new ExcelException("@ResponseExcel 返回值必须为List类型");
 		}
-		return false;
 	}
 
 	@Override
 	@SneakyThrows
-	public void export(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
+	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
 		List list = (List) obj;
-		String name = ExcelNameContextHolder.get();
-		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
-		response.setContentType("application/vnd.ms-excel");
-		response.setCharacterEncoding("utf-8");
-		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
-
 		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0)
 			.getClass()).autoCloseStream(true).excelType(responseExcel.suffix()).inMemory(responseExcel.inMemory());
 
@@ -70,15 +59,6 @@ public class SingleSheetWriteHandler implements SheetWriteHandler {
 
 		if (StringUtils.hasText(responseExcel.password())) {
 			writerBuilder.password(responseExcel.password());
-		}
-
-		if (StringUtils.hasText(responseExcel.template())) {
-			ClassPathResource classPathResource = new ClassPathResource(configProperties.getTemplatePath()
-				+ File.separator + responseExcel.template());
-			InputStream inputStream = classPathResource.getInputStream();
-			writerBuilder.withTemplate(inputStream);
-			sheet = EasyExcel.writerSheet().build();
-
 		}
 
 		if (responseExcel.include().length != 0) {
@@ -99,6 +79,15 @@ public class SingleSheetWriteHandler implements SheetWriteHandler {
 			for (Class<? extends Converter> clazz : responseExcel.converter()) {
 				writerBuilder.registerConverter(clazz.newInstance());
 			}
+		}
+
+		if (StringUtils.hasText(responseExcel.template())) {
+			ClassPathResource classPathResource = new ClassPathResource(configProperties.getTemplatePath()
+				+ File.separator + responseExcel.template());
+			InputStream inputStream = classPathResource.getInputStream();
+			writerBuilder.withTemplate(inputStream);
+			sheet = EasyExcel.writerSheet().build();
+
 		}
 
 		ExcelWriter excelWriter = writerBuilder.build();

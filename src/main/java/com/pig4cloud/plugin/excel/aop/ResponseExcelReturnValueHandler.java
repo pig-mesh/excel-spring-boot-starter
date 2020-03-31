@@ -6,7 +6,6 @@ import com.pig4cloud.plugin.excel.handler.SheetWriteHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
@@ -55,20 +54,8 @@ public class ResponseExcelReturnValueHandler implements HandlerMethodReturnValue
 		Assert.state(responseExcel != null, "No @ResponseExcel");
 		mavContainer.setRequestHandled(true);
 
-		/* return value check */
-		if (!(o instanceof List)) {
-			String msg = "return value is null or not support type, can not build excel";
-			log.warn(msg);
-			response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-			response.getWriter().write(msg);
-			response.getWriter().flush();
-			return;
-		}
-
 		sheetWriteHandlerList.forEach(handler -> {
-			if (handler.support(o)) {
-				handler.export(o, response, responseExcel);
-			}
+			handler.export(o, response, responseExcel);
 		});
 	}
 }

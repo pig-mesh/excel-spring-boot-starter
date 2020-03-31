@@ -8,18 +8,16 @@ import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
-import com.pig4cloud.plugin.excel.kit.ExcelNameContextHolder;
+import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +27,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
-public class ManySheetWriteHandler implements SheetWriteHandler {
+public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	private final ExcelConfigProperties configProperties;
 
 	/**
@@ -42,23 +40,17 @@ public class ManySheetWriteHandler implements SheetWriteHandler {
 	public boolean support(Object obj) {
 		if (obj instanceof List) {
 			List objList = (List) obj;
-			if (objList.get(0) instanceof List) {
-				return true;
-			}
+			return objList.get(0) instanceof List;
+		} else {
+			throw new ExcelException("@ResponseExcel 返回值必须为List类型");
 		}
-		return false;
 	}
 
 	@Override
 	@SneakyThrows
-	public void export(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
+	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
 		List objList = (List) obj;
 		List eleList = (List) objList.get(0);
-		String name = ExcelNameContextHolder.get();
-		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
-		response.setContentType("application/vnd.ms-excel");
-		response.setCharacterEncoding("utf-8");
-		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
 
 		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), eleList.get(0)
 			.getClass()).autoCloseStream(true).excelType(responseExcel.suffix()).inMemory(responseExcel.inMemory());
@@ -100,7 +92,7 @@ public class ManySheetWriteHandler implements SheetWriteHandler {
 
 		for (int i = 0; i < sheets.length; i++) {
 			//创建sheet
-			WriteSheet sheet = null;
+			WriteSheet sheet;
 			if (StringUtils.hasText(responseExcel.template())) {
 				sheet = EasyExcel.writerSheet(i).build();
 			} else {
