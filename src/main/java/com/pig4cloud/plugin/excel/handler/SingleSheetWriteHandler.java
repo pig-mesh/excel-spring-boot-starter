@@ -2,9 +2,6 @@ package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.converters.Converter;
-import com.alibaba.excel.write.builder.ExcelWriterBuilder;
-import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
@@ -12,13 +9,9 @@ import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,45 +45,12 @@ public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 	@SneakyThrows
 	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
 		List list = (List) obj;
-		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0)
-			.getClass()).autoCloseStream(true).excelType(responseExcel.suffix()).inMemory(responseExcel.inMemory());
 
-		WriteSheet sheet = EasyExcel.writerSheet(responseExcel.sheet()[0]).build();
+		ExcelWriter excelWriter = getExcelWriter(response, responseExcel, list, configProperties.getTemplatePath());
+		// 有模板则不指定sheet名
+		WriteSheet sheet = StringUtils.hasText(responseExcel.template()) ?
+			EasyExcel.writerSheet().build() : EasyExcel.writerSheet(responseExcel.sheet()[0]).build();
 
-		if (StringUtils.hasText(responseExcel.password())) {
-			writerBuilder.password(responseExcel.password());
-		}
-
-		if (responseExcel.include().length != 0) {
-			writerBuilder.includeColumnFiledNames(Arrays.asList(responseExcel.include()));
-		}
-
-		if (responseExcel.exclude().length != 0) {
-			writerBuilder.excludeColumnFiledNames(Arrays.asList(responseExcel.include()));
-		}
-
-		if (responseExcel.writeHandler().length != 0) {
-			for (Class<? extends WriteHandler> clazz : responseExcel.writeHandler()) {
-				writerBuilder.registerWriteHandler(clazz.newInstance());
-			}
-		}
-
-		if (responseExcel.converter().length != 0) {
-			for (Class<? extends Converter> clazz : responseExcel.converter()) {
-				writerBuilder.registerConverter(clazz.newInstance());
-			}
-		}
-
-		if (StringUtils.hasText(responseExcel.template())) {
-			ClassPathResource classPathResource = new ClassPathResource(configProperties.getTemplatePath()
-				+ File.separator + responseExcel.template());
-			InputStream inputStream = classPathResource.getInputStream();
-			writerBuilder.withTemplate(inputStream);
-			sheet = EasyExcel.writerSheet().build();
-
-		}
-
-		ExcelWriter excelWriter = writerBuilder.build();
 		excelWriter.write(list, sheet);
 		excelWriter.finish();
 	}
