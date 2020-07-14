@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
+		<version>2.2.8.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.pig4cloud.excel</groupId>
 	<artifactId>excel-spring-boot-starter</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>excel-spring-boot-starter</name>
 	<description>easy and high performance excel</description>
 	<url>https://pig4cloud.com</url>
@@ -60,14 +60,14 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>easyexcel</artifactId>
-			<version>2.1.6</version>
+			<version>2.2.6</version>
 		</dependency>
 
 		<!-- mica-auto -->
 		<dependency>
 			<groupId>net.dreamlu</groupId>
 			<artifactId>mica-auto</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.3</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -77,6 +77,7 @@
 
 		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>release</id>
