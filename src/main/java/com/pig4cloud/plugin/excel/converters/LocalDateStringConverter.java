@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Date and string converter
+ * LocalDate and string converter
  *
  * @author L.cm
  */
@@ -43,13 +43,14 @@ public enum LocalDateStringConverter implements Converter<LocalDate> {
 	}
 
 	@Override
-	public CellData convertToExcelData(LocalDate value, ExcelContentProperty contentProperty,
-									   GlobalConfiguration globalConfiguration) {
+	public CellData<String> convertToExcelData(LocalDate value, ExcelContentProperty contentProperty,
+											   GlobalConfiguration globalConfiguration) {
+		DateTimeFormatter formatter;
 		if (contentProperty == null || contentProperty.getDateTimeFormatProperty() == null) {
-			return new CellData(value.format(DateTimeFormatter.ISO_LOCAL_DATE));
+			formatter = DateTimeFormatter.ISO_LOCAL_DATE;
 		} else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(contentProperty.getDateTimeFormatProperty().getFormat());
-			return new CellData(value.format(formatter));
+			formatter = DateTimeFormatter.ofPattern(contentProperty.getDateTimeFormatProperty().getFormat());
 		}
+		return new CellData<>(value.format(formatter));
 	}
 }
