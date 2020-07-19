@@ -6,12 +6,16 @@ import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
+import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
+import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
+import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
-import com.pig4cloud.plugin.excel.kit.ExcelNameContextHolder;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -19,6 +23,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author lengleng
@@ -42,7 +47,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 	public void export(Object o, HttpServletResponse response, ResponseExcel responseExcel) {
 		if (support(o)) {
 			check(responseExcel);
-			String name = ExcelNameContextHolder.get();
+			RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+			String name = (String) Objects.requireNonNull(requestAttributes)
+				.getAttribute(DynamicNameAspect.EXCEL_NAME_KEY, RequestAttributes.SCOPE_REQUEST);
 			String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
 			response.setContentType("application/vnd.ms-excel");
 			response.setCharacterEncoding("utf-8");
@@ -53,17 +60,21 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 
 	/**
 	 * 通用的获取ExcelWriter方法
-	 * @param response  HttpServletResponse
+	 *
+	 * @param response      HttpServletResponse
 	 * @param responseExcel ResponseExcel注解
-	 * @param list  Excel数据
-	 * @param templatePath 模板地址
-	 * @return  ExcelWriter
+	 * @param list          Excel数据
+	 * @param templatePath  模板地址
+	 * @return ExcelWriter
 	 */
 	@SneakyThrows
-	public ExcelWriter getExcelWriter(HttpServletResponse response, ResponseExcel responseExcel, List list, String templatePath)  {
-		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0)
-			.getClass()).autoCloseStream(true).excelType(responseExcel.suffix()).inMemory(responseExcel.inMemory());
-
+	public ExcelWriter getExcelWriter(HttpServletResponse response, ResponseExcel responseExcel, List list, String templatePath) {
+		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0).getClass())
+			.registerConverter(LocalDateStringConverter.INSTANCE)
+			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
+			.autoCloseStream(true)
+			.excelType(responseExcel.suffix())
+			.inMemory(responseExcel.inMemory());
 
 		if (StringUtils.hasText(responseExcel.password())) {
 			writerBuilder.password(responseExcel.password());
