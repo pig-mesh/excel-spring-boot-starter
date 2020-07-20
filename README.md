@@ -12,7 +12,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 <dependency>
     <groupId>com.pig4cloud.excel</groupId>
     <artifactId>excel-spring-boot-starter</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 </dependency>
 ```
 
@@ -137,6 +137,6 @@ public List<DemoData> e1() {
 
 ## 其他用法
 
-- 理论上支持 [alibaba/easyexcel](https://github.com/alibaba/easyexcel) v2.1.6 版本的大部分配置
+- 理论上支持 [alibaba/easyexcel](https://github.com/alibaba/easyexcel) v2.2.6 版本的大部分配置
 - 支持 [alibaba/easyexcel](https://www.yuque.com/easyexcel/doc/write) 原生的配置注解
 - [github stater 地址，可fork 魔改](https://github.com/pigxcloud/excel-spring-boot-starter)
