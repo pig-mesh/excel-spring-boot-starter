@@ -8,6 +8,7 @@ import com.alibaba.excel.write.handler.WriteHandler;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
 import com.pig4cloud.plugin.excel.converters.ArrayConverter;
+import com.pig4cloud.plugin.excel.converters.CollectionConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
@@ -75,6 +76,7 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
 			.registerConverter(ArrayConverter.INSTANCE)
+			.registerConverter(CollectionConverter.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());
