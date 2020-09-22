@@ -5,9 +5,9 @@ import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.util.StringUtils;
 
 /**
@@ -19,11 +19,11 @@ public enum ArrayConverter implements Converter<Object[]> {
 	/**
 	 * 实例
 	 */
-	INSTANCE((GenericConversionService) DefaultConversionService.getSharedInstance());
+	INSTANCE(DefaultConversionService.getSharedInstance());
 
-	private final GenericConversionService conversionService;
+	private final ConversionService conversionService;
 
-	ArrayConverter(GenericConversionService sharedInstance) {
+	ArrayConverter(ConversionService sharedInstance) {
 		this.conversionService = sharedInstance;
 	}
 
@@ -40,11 +40,12 @@ public enum ArrayConverter implements Converter<Object[]> {
 	@Override
 	public Object[] convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
 		String[] value = StringUtils.delimitedListToStringArray(cellData.getStringValue(), ",");
-		return (Object[]) conversionService.convert(value, new TypeDescriptor(contentProperty.getField()));
+		return (Object[]) conversionService.convert(value, TypeDescriptor.valueOf(String[].class), new TypeDescriptor(contentProperty.getField()));
 	}
 
 	@Override
 	public CellData<String> convertToExcelData(Object[] value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
 		return new CellData<>(StringUtils.arrayToCommaDelimitedString(value));
 	}
+
 }
