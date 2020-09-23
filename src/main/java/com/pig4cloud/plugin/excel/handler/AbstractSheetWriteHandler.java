@@ -7,10 +7,13 @@ import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
+import com.pig4cloud.plugin.excel.converters.ArrayConverter;
+import com.pig4cloud.plugin.excel.converters.CollectionConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.SneakyThrows;
+import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
@@ -72,6 +75,8 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0).getClass())
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
+			.registerConverter(ArrayConverter.INSTANCE)
+			.registerConverter(CollectionConverter.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());
@@ -96,7 +101,7 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 
 		if (responseExcel.converter().length != 0) {
 			for (Class<? extends Converter> clazz : responseExcel.converter()) {
-				writerBuilder.registerConverter(clazz.newInstance());
+				writerBuilder.registerConverter(BeanUtils.instantiateClass(clazz));
 			}
 		}
 
