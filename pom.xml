@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.2.RELEASE</version>
+		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.pig4cloud.excel</groupId>
 	<artifactId>excel-spring-boot-starter</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6</version>
 	<name>excel-spring-boot-starter</name>
 	<description>easy and high performance excel</description>
 	<url>https://pig4cloud.com</url>
