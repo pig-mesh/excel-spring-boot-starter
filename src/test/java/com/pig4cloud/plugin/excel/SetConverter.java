@@ -10,7 +10,6 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +26,7 @@ public class SetConverter implements Converter<Set<?>> {
 
 	@Override
 	public Class<?> supportJavaTypeKey() {
-		return List.class;
+		return Set.class;
 	}
 
 	@Override
