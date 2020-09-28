@@ -125,6 +125,55 @@ public List<List<DemoData>> e1() {
 ```
 ![](http://pigx.vip/20200331164945_6fsEsG_Screenshot.jpeg)
 
+## 添加全局自定义转换器（Converter）
+
+`0.0.6` 版本开始添加了全局自定义转换器注入的功能，你只需要将自定义的 `Converter` 注册成 `Spring bean` 即可。
+
+示例代码如下（对 set 类型转换）：
+```java
+@Data
+public class TestModel {
+	@ExcelProperty("名称集合")
+	private Set<String> nameSet;
+}
+
+/**
+ * 集合转换器
+ *
+ * @author L.cm
+ */
+@Component
+public class SetConverter implements Converter<Set<?>> {
+	private final ConversionService conversionService;
+
+	SetConverter() {
+		this.conversionService = DefaultConversionService.getSharedInstance();
+	}
+
+	@Override
+	public Class<?> supportJavaTypeKey() {
+		return Set.class;
+	}
+
+	@Override
+	public CellDataTypeEnum supportExcelTypeKey() {
+		return CellDataTypeEnum.STRING;
+	}
+
+	@Override
+	public Set<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+		String[] value = StringUtils.delimitedListToStringArray(cellData.getStringValue(), ",");
+		return (Set<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class), new TypeDescriptor(contentProperty.getField()));
+	}
+
+	@Override
+	public CellData<String> convertToExcelData(Set<?> value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+		return new CellData<>(StringUtils.collectionToCommaDelimitedString(value));
+	}
+
+}
+```
+
 ## 高级用法模板导出
 
 ```java
