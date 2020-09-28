@@ -7,8 +7,6 @@ import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
-import com.pig4cloud.plugin.excel.converters.ArrayConverter;
-import com.pig4cloud.plugin.excel.converters.CollectionConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
@@ -30,6 +28,7 @@ import java.util.Objects;
 
 /**
  * @author lengleng
+ * @author L.cm
  * @date 2020/3/31
  */
 public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
@@ -75,8 +74,6 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0).getClass())
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
-			.registerConverter(ArrayConverter.INSTANCE)
-			.registerConverter(CollectionConverter.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());
@@ -99,6 +96,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 			}
 		}
 
+		// 自定义注入的转换器
+		registerCustomConverter(writerBuilder);
+
 		if (responseExcel.converter().length != 0) {
 			for (Class<? extends Converter> clazz : responseExcel.converter()) {
 				writerBuilder.registerConverter(BeanUtils.instantiateClass(clazz));
@@ -114,4 +114,12 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 
 		return writerBuilder.build();
 	}
+
+	/**
+	 * 自定义注入转换器
+	 *
+	 * @param builder ExcelWriterBuilder
+	 */
+	public abstract void registerCustomConverter(ExcelWriterBuilder builder);
+
 }

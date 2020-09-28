@@ -1,4 +1,4 @@
-package com.pig4cloud.plugin.excel.converters;
+package com.pig4cloud.plugin.excel;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
@@ -10,26 +10,23 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
- * 数组转换
+ * 集合转换
  *
  * @author L.cm
  */
-public enum ArrayConverter implements Converter<Object[]> {
-	/**
-	 * 实例
-	 */
-	INSTANCE(DefaultConversionService.getSharedInstance());
-
+public class ListConverter implements Converter<List<?>> {
 	private final ConversionService conversionService;
 
-	ArrayConverter(ConversionService sharedInstance) {
-		this.conversionService = sharedInstance;
+	ListConverter() {
+		this.conversionService = DefaultConversionService.getSharedInstance();
 	}
 
 	@Override
 	public Class<?> supportJavaTypeKey() {
-		return Object[].class;
+		return List.class;
 	}
 
 	@Override
@@ -38,14 +35,14 @@ public enum ArrayConverter implements Converter<Object[]> {
 	}
 
 	@Override
-	public Object[] convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+	public List<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
 		String[] value = StringUtils.delimitedListToStringArray(cellData.getStringValue(), ",");
-		return (Object[]) conversionService.convert(value, TypeDescriptor.valueOf(String[].class), new TypeDescriptor(contentProperty.getField()));
+		return (List<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class), new TypeDescriptor(contentProperty.getField()));
 	}
 
 	@Override
-	public CellData<String> convertToExcelData(Object[] value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
-		return new CellData<>(StringUtils.arrayToCommaDelimitedString(value));
+	public CellData<String> convertToExcelData(List<?> value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+		return new CellData<>(StringUtils.collectionToCommaDelimitedString(value));
 	}
 
 }

@@ -2,12 +2,15 @@ package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.converters.Converter;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
@@ -16,6 +19,7 @@ import java.util.List;
 
 /**
  * @author lengleng
+ * @author L.cm
  * @date 2020/3/29
  * <p>
  * 处理单sheet 页面
@@ -24,6 +28,7 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 	private final ExcelConfigProperties configProperties;
+	private final ObjectProvider<List<Converter<?>>> converterProvider;
 
 	/**
 	 * obj 是List 且list不为空同时list中的元素不是是List 才返回true
@@ -53,5 +58,10 @@ public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 
 		excelWriter.write(list, sheet);
 		excelWriter.finish();
+	}
+
+	@Override
+	public void registerCustomConverter(ExcelWriterBuilder builder) {
+		converterProvider.ifAvailable(converters -> converters.forEach(builder::registerConverter));
 	}
 }

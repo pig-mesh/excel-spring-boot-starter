@@ -38,7 +38,7 @@
 		<java.version>1.8</java.version>
 		<poi.version>4.0.1</poi.version>
 		<easypoi.version>2.2.6</easypoi.version>
-		<mica.version>1.2.3</mica.version>
+		<mica.version>1.2.5</mica.version>
 	</properties>
 
 	<dependencies>
@@ -47,19 +47,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<!--引入AOP依赖-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>easyexcel</artifactId>
@@ -79,7 +71,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<!-- 使用 POI 4.x 解决 issue #1 支持java11-->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -96,13 +87,24 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!-- mica-auto -->
 		<dependency>
 			<groupId>net.dreamlu</groupId>
 			<artifactId>mica-auto</artifactId>
 			<version>${mica.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -2,12 +2,15 @@ package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.converters.Converter;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
@@ -16,12 +19,14 @@ import java.util.List;
 
 /**
  * @author lengleng
+ * @author L.cm
  * @date 2020/3/29
  */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	private final ExcelConfigProperties configProperties;
+	private final ObjectProvider<List<Converter<?>>> converterProvider;
 
 	/**
 	 * 当且仅当List不为空且List中的元素也是List 才返回true
@@ -33,7 +38,7 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	public boolean support(Object obj) {
 		if (obj instanceof List) {
 			List objList = (List) obj;
-			return !objList.isEmpty()&&objList.get(0) instanceof List;
+			return !objList.isEmpty() && objList.get(0) instanceof List;
 		} else {
 			throw new ExcelException("@ResponseExcel 返回值必须为List类型");
 		}
@@ -61,5 +66,10 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 			excelWriter.write((List) objList.get(i), sheet);
 		}
 		excelWriter.finish();
+	}
+
+	@Override
+	public void registerCustomConverter(ExcelWriterBuilder builder) {
+		converterProvider.ifAvailable(converters -> converters.forEach(builder::registerConverter));
 	}
 }
