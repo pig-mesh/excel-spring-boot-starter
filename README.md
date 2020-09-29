@@ -127,7 +127,7 @@ public List<List<DemoData>> e1() {
 
 ## 添加全局自定义转换器（Converter）
 
-`0.0.6` 版本开始添加了全局自定义转换器注入的功能，你只需要将自定义的 `Converter` 注册成 `Spring bean` 即可。
+`0.0.7` 版本开始添加了全局自定义转换器注入的功能，你只需要将自定义的 `Converter` 注册成 `Spring bean` 即可。
 
 示例代码如下（对 set 类型转换）：
 ```java
