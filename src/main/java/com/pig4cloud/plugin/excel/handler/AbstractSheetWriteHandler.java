@@ -9,6 +9,7 @@ import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
 import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
+import com.pig4cloud.plugin.excel.head.HeadGenerator;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
@@ -69,12 +70,22 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 	 */
 	@SneakyThrows
 	public ExcelWriter getExcelWriter(HttpServletResponse response, ResponseExcel responseExcel, List list, String templatePath) {
-		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0).getClass())
+		// 数据类型
+		Class<?> dataClass = list.get(0).getClass();
+
+		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), dataClass)
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());
+
+		// Excel头信息增强
+		Class<? extends HeadGenerator> headEnhancerClass = responseExcel.headGenerator();
+		if (!headEnhancerClass.isInterface()) {
+			HeadGenerator headGenerator = BeanUtils.instantiateClass(headEnhancerClass);
+			writerBuilder.head(headGenerator.head(writerBuilder, dataClass));
+		}
 
 		if (StringUtils.hasText(responseExcel.password())) {
 			writerBuilder.password(responseExcel.password());
