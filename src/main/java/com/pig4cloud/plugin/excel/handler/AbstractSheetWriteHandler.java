@@ -47,17 +47,15 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 	@Override
 	@SneakyThrows
 	public void export(Object o, HttpServletResponse response, ResponseExcel responseExcel) {
-		if (support(o)) {
-			check(responseExcel);
-			RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-			String name = (String) Objects.requireNonNull(requestAttributes)
-				.getAttribute(DynamicNameAspect.EXCEL_NAME_KEY, RequestAttributes.SCOPE_REQUEST);
-			String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
-			response.setContentType("application/vnd.ms-excel");
-			response.setCharacterEncoding("utf-8");
-			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
-			write(o, response, responseExcel);
-		}
+		check(responseExcel);
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		String name = (String) Objects.requireNonNull(requestAttributes)
+			.getAttribute(DynamicNameAspect.EXCEL_NAME_KEY, RequestAttributes.SCOPE_REQUEST);
+		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
+		response.setContentType("application/vnd.ms-excel");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
+		write(o, response, responseExcel);
 	}
 
 	/**
@@ -117,9 +115,12 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 
 	/**
 	 * 自定义注入转换器
+	 * 如果有需要，子类自己重写
 	 *
 	 * @param builder ExcelWriterBuilder
 	 */
-	public abstract void registerCustomConverter(ExcelWriterBuilder builder);
+	public void registerCustomConverter(ExcelWriterBuilder builder) {
+		// do nothing
+	}
 
 }

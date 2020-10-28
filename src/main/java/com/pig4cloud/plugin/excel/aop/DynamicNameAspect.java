@@ -7,7 +7,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -19,7 +18,6 @@ import java.util.Objects;
  */
 @Aspect
 @RequiredArgsConstructor
-@Configuration(proxyBeanMethods = false)
 public class DynamicNameAspect {
 	public static final String EXCEL_NAME_KEY = "__EXCEL_NAME_KEY__";
 	private final NameProcessor processor;
