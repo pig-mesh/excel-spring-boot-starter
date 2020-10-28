@@ -101,7 +101,7 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 
 		if (responseExcel.writeHandler().length != 0) {
 			for (Class<? extends WriteHandler> clazz : responseExcel.writeHandler()) {
-				writerBuilder.registerWriteHandler(clazz.newInstance());
+				writerBuilder.registerWriteHandler(BeanUtils.instantiateClass(clazz));
 			}
 		}
 
