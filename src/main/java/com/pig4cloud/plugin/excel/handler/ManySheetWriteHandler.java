@@ -11,7 +11,6 @@ import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,6 @@ import java.util.List;
  * @date 2020/3/29
  */
 @RequiredArgsConstructor
-@Configuration(proxyBeanMethods = false)
 public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	private final ExcelConfigProperties configProperties;
 	private final ObjectProvider<List<Converter<?>>> converterProvider;

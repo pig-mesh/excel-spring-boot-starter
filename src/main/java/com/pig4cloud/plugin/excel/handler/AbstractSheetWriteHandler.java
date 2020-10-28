@@ -9,6 +9,7 @@ import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
 import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
 import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
+import com.pig4cloud.plugin.excel.head.HeadGenerator;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
@@ -47,17 +48,15 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 	@Override
 	@SneakyThrows
 	public void export(Object o, HttpServletResponse response, ResponseExcel responseExcel) {
-		if (support(o)) {
-			check(responseExcel);
-			RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-			String name = (String) Objects.requireNonNull(requestAttributes)
-				.getAttribute(DynamicNameAspect.EXCEL_NAME_KEY, RequestAttributes.SCOPE_REQUEST);
-			String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
-			response.setContentType("application/vnd.ms-excel");
-			response.setCharacterEncoding("utf-8");
-			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
-			write(o, response, responseExcel);
-		}
+		check(responseExcel);
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		String name = (String) Objects.requireNonNull(requestAttributes)
+			.getAttribute(DynamicNameAspect.EXCEL_NAME_KEY, RequestAttributes.SCOPE_REQUEST);
+		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
+		response.setContentType("application/vnd.ms-excel");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
+		write(o, response, responseExcel);
 	}
 
 	/**
@@ -71,12 +70,22 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 	 */
 	@SneakyThrows
 	public ExcelWriter getExcelWriter(HttpServletResponse response, ResponseExcel responseExcel, List list, String templatePath) {
-		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), list.get(0).getClass())
+		// 数据类型
+		Class<?> dataClass = list.get(0).getClass();
+
+		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream(), dataClass)
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());
+
+		// Excel头信息增强
+		Class<? extends HeadGenerator> headEnhancerClass = responseExcel.headGenerator();
+		if (!headEnhancerClass.isInterface()) {
+			HeadGenerator headGenerator = BeanUtils.instantiateClass(headEnhancerClass);
+			writerBuilder.head(headGenerator.head(writerBuilder, dataClass));
+		}
 
 		if (StringUtils.hasText(responseExcel.password())) {
 			writerBuilder.password(responseExcel.password());
@@ -117,9 +126,12 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 
 	/**
 	 * 自定义注入转换器
+	 * 如果有需要，子类自己重写
 	 *
 	 * @param builder ExcelWriterBuilder
 	 */
-	public abstract void registerCustomConverter(ExcelWriterBuilder builder);
+	public void registerCustomConverter(ExcelWriterBuilder builder) {
+		// do nothing
+	}
 
 }

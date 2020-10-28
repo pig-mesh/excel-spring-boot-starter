@@ -1,0 +1,43 @@
+package com.pig4cloud.plugin.excel;
+
+import com.alibaba.excel.converters.Converter;
+import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.handler.ManySheetWriteHandler;
+import com.pig4cloud.plugin.excel.handler.SingleSheetWriteHandler;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+
+/**
+ * @author Hccake 2020/10/28
+ * @version 1.0
+ */
+@RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
+public class SheetWriteHandlerAutoConfiguration {
+	private final ExcelConfigProperties configProperties;
+	private final ObjectProvider<List<Converter<?>>> converterProvider;
+
+	/**
+	 * 单sheet 写入处理器
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public SingleSheetWriteHandler singleSheetWriteHandler() {
+		return new SingleSheetWriteHandler(configProperties, converterProvider);
+	}
+
+	/**
+	 * 多sheet 写入处理器
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public ManySheetWriteHandler manySheetWriteHandler() {
+		return new ManySheetWriteHandler(configProperties, converterProvider);
+	}
+
+}
