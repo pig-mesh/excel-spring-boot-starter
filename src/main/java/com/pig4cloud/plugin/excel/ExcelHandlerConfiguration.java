@@ -1,8 +1,10 @@
 package com.pig4cloud.plugin.excel;
 
 import com.alibaba.excel.converters.Converter;
+import com.pig4cloud.plugin.excel.aop.ResponseExcelReturnValueHandler;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
 import com.pig4cloud.plugin.excel.handler.ManySheetWriteHandler;
+import com.pig4cloud.plugin.excel.handler.SheetWriteHandler;
 import com.pig4cloud.plugin.excel.handler.SingleSheetWriteHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
@@ -18,7 +20,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
-public class SheetWriteHandlerAutoConfiguration {
+public class ExcelHandlerConfiguration {
 	private final ExcelConfigProperties configProperties;
 	private final ObjectProvider<List<Converter<?>>> converterProvider;
 
@@ -38,6 +40,18 @@ public class SheetWriteHandlerAutoConfiguration {
 	@ConditionalOnMissingBean
 	public ManySheetWriteHandler manySheetWriteHandler() {
 		return new ManySheetWriteHandler(configProperties, converterProvider);
+	}
+
+	/**
+	 * 返回Excel文件的 response 处理器
+	 * @param sheetWriteHandlerList 页签写入处理器集合
+	 * @return ResponseExcelReturnValueHandler
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public ResponseExcelReturnValueHandler responseExcelReturnValueHandler(
+		List<SheetWriteHandler> sheetWriteHandlerList) {
+		return new ResponseExcelReturnValueHandler(sheetWriteHandlerList);
 	}
 
 }
