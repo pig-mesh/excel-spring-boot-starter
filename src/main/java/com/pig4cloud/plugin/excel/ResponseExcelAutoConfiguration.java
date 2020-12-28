@@ -30,7 +30,7 @@ import java.util.List;
 @EnableConfigurationProperties(ExcelConfigProperties.class)
 public class ResponseExcelAutoConfiguration {
 
-	private final RequestMappingHandlerAdapter handlerAdapter;
+	private final RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 
 	private final ResponseExcelReturnValueHandler responseExcelReturnValueHandler;
 
@@ -60,13 +60,13 @@ public class ResponseExcelAutoConfiguration {
 	 */
 	@PostConstruct
 	public void setReturnValueHandlers() {
-		List<HandlerMethodReturnValueHandler> returnValueHandlers = handlerAdapter.getReturnValueHandlers();
+		List<HandlerMethodReturnValueHandler> returnValueHandlers = requestMappingHandlerAdapter.getReturnValueHandlers();
 
 		List<HandlerMethodReturnValueHandler> newHandlers = new ArrayList<>();
 		newHandlers.add(responseExcelReturnValueHandler);
 		assert returnValueHandlers != null;
 		newHandlers.addAll(returnValueHandlers);
-		handlerAdapter.setReturnValueHandlers(newHandlers);
+		requestMappingHandlerAdapter.setReturnValueHandlers(newHandlers);
 	}
 
 }
