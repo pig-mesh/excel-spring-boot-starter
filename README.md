@@ -185,6 +185,33 @@ public List<DemoData> e1() {
 }
 ```
 
+## 读取 Excel
+
+- 接口类定义List 接受表格对应的数据 使用 @RequestExcel 标记
+```java
+@PostMapping
+public String req(@RequestExcel List<Demo> demoList) {
+  return "success";
+}
+```
+
+- 实体声明
+
+```java
+@Data
+public class Demo {
+  @ExcelProperty(index = 0)
+  private String username;
+
+  @ExcelProperty(index = 1)
+  private String password;
+}
+```
+
+- 测试表格
+
+![1618560470](https://minio.pigx.vip/oss/1618560470.png)
+
 ## 其他用法
 
 - 理论上支持 [alibaba/easyexcel](https://github.com/alibaba/easyexcel) v2.2.6 版本的大部分配置
