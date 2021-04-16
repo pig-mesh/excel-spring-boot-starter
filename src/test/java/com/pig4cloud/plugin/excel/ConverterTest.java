@@ -1,21 +1,21 @@
 package com.pig4cloud.plugin.excel;
 
 import com.alibaba.excel.converters.Converter;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 /**
  * 测试 Converter
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Void.class)
 @Import(value = {
 	ListConverter.class,
@@ -29,7 +29,7 @@ public class ConverterTest {
 	@Test
 	public void test() {
 		List<Converter<?>> ifAvailable = converterProvider.getIfAvailable();
-		Assert.assertFalse(ifAvailable.isEmpty());
+		Assertions.assertFalse(ifAvailable.isEmpty());
 	}
 
 }
