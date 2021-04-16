@@ -26,4 +26,12 @@ public class ReaderExcelTests {
 		ClassPathResource classPathResource = new ClassPathResource("tmp/indexOrName.xlsx");
 		EasyExcel.read(classPathResource.getInputStream(), IndexOrNameData.class, new IndexOrNameDataListener()).sheet().doRead();
 	}
+
+
+	@Test
+	@SneakyThrows
+	public void indexOrNameRead1() {
+		ClassPathResource classPathResource = new ClassPathResource("tmp/indexOrName1.xlsx");
+		EasyExcel.read(classPathResource.getInputStream(), IndexOrNameData1.class, new IndexOrNameDataListener1()).sheet().doRead();
+	}
 }
