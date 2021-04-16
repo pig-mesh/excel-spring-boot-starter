@@ -23,3 +23,25 @@ jobs:
         distribution: 'adopt'
     - name: Build with Maven
       run: mvn clean install
+
+      # 发送钉钉消息
+    - name: build success
+      if: ${{ success() }}
+      uses: fifsky/dingtalk-action@master
+      with:
+        url: ${{ secrets.DINGTALK_WEBHOOK}}
+        type: markdown
+        content: |
+          # 💯👨‍💻 Success 🎉🎉🎉
+          > 云效构建: https://github.com/pig-mesh/excel-spring-boot-starter success
+          > ^_^ from github action message
+    - name: maven build failure
+      if: ${{ failure() }}
+      uses: fifsky/dingtalk-action@master
+      with:
+        url: ${{ secrets.DINGTALK_WEBHOOK}}
+        type: markdown
+        content: |
+          # 💤🤷‍♀️ failure 🙅‍♂️💣
+          > 云效构建: https://github.com/pig-mesh/excel-spring-boot-starter failure
+          > (⋟﹏⋞)   from github action message
