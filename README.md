@@ -16,7 +16,18 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 </dependency>
 ```
 
-## 使用方法
+## Excel 读取（解析）
+
+只需要在 `Controller` 层方法便增加 `@RequestExcel` 注解即可，该注解上可自定义 `readListener`。
+
+```java
+@PostMapping("/upload")
+public void upload(@RequestExcel List<DemoData> dataList) {
+
+}
+```
+
+## Excel 生成
 
 只需要在 `Controller` 层返回 List 并增加 `@ResponseExcel`注解即可
 
@@ -110,20 +121,21 @@ public List<List<DemoData>> e1() {
     return lists;
 }
 ```
+
 ![](http://pigx.vip/20200331164527_sbYDsC_Screenshot.jpeg)
 
 ## 设置导出加密码
 ```java
-	@ResponseExcel(name = "lengleng", sheet = "sheetName",password = "lengleng")
-	@GetMapping("/e1")
-	public List<List<DemoData>> e1() {
-		List<List<DemoData>> lists = new ArrayList<>();
-		lists.add(list());
-		lists.add(list());
-		return lists;
-	}
-
+@ResponseExcel(name = "lengleng", sheet = "sheetName",password = "lengleng")
+@GetMapping("/e1")
+public List<List<DemoData>> e1() {
+    List<List<DemoData>> lists = new ArrayList<>();
+    lists.add(list());
+    lists.add(list());
+    return lists;
+}
 ```
+
 ![](http://pigx.vip/20200331164945_6fsEsG_Screenshot.jpeg)
 
 ## 添加全局自定义转换器（Converter）
