@@ -1,21 +1,20 @@
 package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 默认的 AnalysisEventListener
+ *
  * @author lengleng
+ * @author L.cm
  * @date 2021/4/16
  */
 @Slf4j
-public class SheetAnalysisEventListener extends AnalysisEventListener<Object> {
-
-	@Getter
+public class DefaultAnalysisEventListener extends ListAnalysisEventListener<Object> {
 	private List<Object> list = new ArrayList<>();
 
 	@Override
@@ -25,7 +24,12 @@ public class SheetAnalysisEventListener extends AnalysisEventListener<Object> {
 
 	@Override
 	public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-		log.debug("execl read analysed");
+		log.debug("Excel read analysed");
+	}
+
+	@Override
+	public List<Object> getList() {
+		return list;
 	}
 
 }
