@@ -35,10 +35,11 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 	@Override
 	@SneakyThrows
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer modelAndViewContainer,
-								  NativeWebRequest webRequest, WebDataBinderFactory webDataBinderFactory) {
+			NativeWebRequest webRequest, WebDataBinderFactory webDataBinderFactory) {
 		Class<?> parameterType = parameter.getParameterType();
 		if (!parameterType.isAssignableFrom(List.class)) {
-			throw new IllegalArgumentException("Excel upload request resolver error, @RequestExcel parameter is not List " + parameterType);
+			throw new IllegalArgumentException(
+					"Excel upload request resolver error, @RequestExcel parameter is not List " + parameterType);
 		}
 
 		// 处理自定义 readListener
@@ -53,9 +54,7 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 		ServletInputStream inputStream = request.getInputStream();
 
 		// 获取目标类型
-		Class<?> excelModelClass = ResolvableType.forMethodParameter(parameter)
-			.getGeneric(0)
-			.resolve();
+		Class<?> excelModelClass = ResolvableType.forMethodParameter(parameter).getGeneric(0).resolve();
 
 		// 这里需要指定读用哪个 class 去读，然后读取第一个 sheet 文件流会自动关闭
 		EasyExcel.read(inputStream, excelModelClass, readListener).sheet().doRead();

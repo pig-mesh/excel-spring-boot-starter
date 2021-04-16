@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Slf4j
 public class DefaultAnalysisEventListener extends ListAnalysisEventListener<Object> {
+
 	private List<Object> list = new ArrayList<>();
 
 	@Override

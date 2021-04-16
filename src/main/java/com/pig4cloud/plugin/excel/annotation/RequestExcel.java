@@ -13,13 +13,12 @@ import java.lang.annotation.*;
  * @date 2021/4/16
  */
 @Documented
-@Target({ElementType.PARAMETER})
+@Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestExcel {
 
 	/**
 	 * 读取的监听器类
-	 *
 	 * @return readListener
 	 */
 	Class<? extends ListAnalysisEventListener<?>> readListener() default DefaultAnalysisEventListener.class;
