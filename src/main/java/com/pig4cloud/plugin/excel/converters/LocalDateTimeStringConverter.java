@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
  * @author L.cm
  */
 public enum LocalDateTimeStringConverter implements Converter<LocalDateTime> {
+
 	/**
 	 * 实例
 	 */
@@ -36,12 +37,13 @@ public enum LocalDateTimeStringConverter implements Converter<LocalDateTime> {
 
 	@Override
 	public LocalDateTime convertToJavaData(CellData cellData, ExcelContentProperty contentProperty,
-										   GlobalConfiguration globalConfiguration) throws ParseException {
+			GlobalConfiguration globalConfiguration) throws ParseException {
 		String stringValue = cellData.getStringValue();
 		String pattern;
 		if (contentProperty == null || contentProperty.getDateTimeFormatProperty() == null) {
 			pattern = switchDateFormat(stringValue);
-		} else {
+		}
+		else {
 			pattern = contentProperty.getDateTimeFormatProperty().getFormat();
 		}
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
@@ -50,11 +52,12 @@ public enum LocalDateTimeStringConverter implements Converter<LocalDateTime> {
 
 	@Override
 	public CellData<String> convertToExcelData(LocalDateTime value, ExcelContentProperty contentProperty,
-											   GlobalConfiguration globalConfiguration) {
+			GlobalConfiguration globalConfiguration) {
 		String pattern;
 		if (contentProperty == null || contentProperty.getDateTimeFormatProperty() == null) {
 			pattern = DateUtils.DATE_FORMAT_19;
-		} else {
+		}
+		else {
 			pattern = contentProperty.getDateTimeFormatProperty().getFormat();
 		}
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
@@ -63,27 +66,28 @@ public enum LocalDateTimeStringConverter implements Converter<LocalDateTime> {
 
 	/**
 	 * switch date format
-	 *
 	 * @param dateString dateString
 	 * @return pattern
 	 */
 	private static String switchDateFormat(String dateString) {
 		int length = dateString.length();
 		switch (length) {
-			case 19:
-				if (dateString.contains(MINUS)) {
-					return DateUtils.DATE_FORMAT_19;
-				} else {
-					return DateUtils.DATE_FORMAT_19_FORWARD_SLASH;
-				}
-			case 17:
-				return DateUtils.DATE_FORMAT_17;
-			case 14:
-				return DateUtils.DATE_FORMAT_14;
-			case 10:
-				return DateUtils.DATE_FORMAT_10;
-			default:
-				throw new IllegalArgumentException("can not find date format for：" + dateString);
+		case 19:
+			if (dateString.contains(MINUS)) {
+				return DateUtils.DATE_FORMAT_19;
+			}
+			else {
+				return DateUtils.DATE_FORMAT_19_FORWARD_SLASH;
+			}
+		case 17:
+			return DateUtils.DATE_FORMAT_17;
+		case 14:
+			return DateUtils.DATE_FORMAT_14;
+		case 10:
+			return DateUtils.DATE_FORMAT_10;
+		default:
+			throw new IllegalArgumentException("can not find date format for：" + dateString);
 		}
 	}
+
 }

@@ -17,10 +17,7 @@ import java.util.List;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Void.class)
-@Import(value = {
-	ListConverter.class,
-	SetConverter.class
-})
+@Import(value = { ListConverter.class, SetConverter.class })
 public class ConverterTest {
 
 	@Autowired

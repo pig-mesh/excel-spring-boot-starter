@@ -22,4 +22,5 @@ public class IndexOrNameDataListener1 extends AnalysisEventListener<IndexOrNameD
 	public void doAfterAllAnalysed(AnalysisContext context) {
 		log.info("所有数据解析完成！");
 	}
+
 }

@@ -11,11 +11,13 @@ import lombok.Data;
  */
 @Data
 public class IndexOrNameData1 {
+
 	/**
 	 * 读取第一列
 	 */
 	@ExcelProperty("列1")
 	private String a;
+
 	/**
 	 * 读取第二列
 	 */
@@ -27,4 +29,5 @@ public class IndexOrNameData1 {
 	 */
 	@ExcelProperty("列3")
 	private String c;
+
 }

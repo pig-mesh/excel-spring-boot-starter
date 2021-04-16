@@ -39,6 +39,8 @@
 		<poi.version>4.0.1</poi.version>
 		<easypoi.version>2.2.6</easypoi.version>
 		<mica.version>1.2.5</mica.version>
+		<spring.checkstyle.plugin>0.0.23</spring.checkstyle.plugin>
+		<git.commit.plugin>2.2.5</git.commit.plugin>
 	</properties>
 
 	<dependencies>
@@ -108,11 +110,29 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<!--打包jar 与git commit 关联插件-->
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>${git.commit.plugin}</version>
+			</plugin>
+			<!--代码格式插件，默认使用spring 规则-->
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>${spring.checkstyle.plugin}</version>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>release</id>
 			<build>
 				<plugins>
+
 					<!-- Source -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>

@@ -21,12 +21,13 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
+
 	private final ExcelConfigProperties configProperties;
+
 	private final ObjectProvider<List<Converter<?>>> converterProvider;
 
 	/**
 	 * 当且仅当List不为空且List中的元素也是List 才返回true
-	 *
 	 * @param obj 返回对象
 	 * @return
 	 */
@@ -35,7 +36,8 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 		if (obj instanceof List) {
 			List objList = (List) obj;
 			return !objList.isEmpty() && objList.get(0) instanceof List;
-		} else {
+		}
+		else {
 			throw new ExcelException("@ResponseExcel 返回值必须为List类型");
 		}
 	}
@@ -52,9 +54,9 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 			List eleList = (List) objList.get(i);
 			Class<?> dataClass = eleList.get(0).getClass();
 
-			//创建sheet
+			// 创建sheet
 			sheet = this.sheet(i, responseExcel.sheet()[i], dataClass, responseExcel.template(),
-				responseExcel.headGenerator());
+					responseExcel.headGenerator());
 			// 写入sheet
 			excelWriter.write((List) objList.get(i), sheet);
 		}
@@ -65,4 +67,5 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	public void registerCustomConverter(ExcelWriterBuilder builder) {
 		converterProvider.ifAvailable(converters -> converters.forEach(builder::registerConverter));
 	}
+
 }

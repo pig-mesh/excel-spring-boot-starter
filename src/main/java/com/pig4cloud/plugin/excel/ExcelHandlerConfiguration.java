@@ -21,7 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class ExcelHandlerConfiguration {
+
 	private final ExcelConfigProperties configProperties;
+
 	private final ObjectProvider<List<Converter<?>>> converterProvider;
 
 	/**
@@ -50,7 +52,7 @@ public class ExcelHandlerConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public ResponseExcelReturnValueHandler responseExcelReturnValueHandler(
-		List<SheetWriteHandler> sheetWriteHandlerList) {
+			List<SheetWriteHandler> sheetWriteHandlerList) {
 		return new ResponseExcelReturnValueHandler(sheetWriteHandlerList);
 	}
 

@@ -18,6 +18,7 @@ import java.util.List;
  * @author L.cm
  */
 public class ListConverter implements Converter<List<?>> {
+
 	private final ConversionService conversionService;
 
 	ListConverter() {
@@ -35,13 +36,16 @@ public class ListConverter implements Converter<List<?>> {
 	}
 
 	@Override
-	public List<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+	public List<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty,
+			GlobalConfiguration globalConfiguration) {
 		String[] value = StringUtils.delimitedListToStringArray(cellData.getStringValue(), ",");
-		return (List<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class), new TypeDescriptor(contentProperty.getField()));
+		return (List<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class),
+				new TypeDescriptor(contentProperty.getField()));
 	}
 
 	@Override
-	public CellData<String> convertToExcelData(List<?> value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+	public CellData<String> convertToExcelData(List<?> value, ExcelContentProperty contentProperty,
+			GlobalConfiguration globalConfiguration) {
 		return new CellData<>(StringUtils.collectionToCommaDelimitedString(value));
 	}
 

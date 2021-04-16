@@ -18,6 +18,7 @@ import java.util.Set;
  * @author L.cm
  */
 public class SetConverter implements Converter<Set<?>> {
+
 	private final ConversionService conversionService;
 
 	SetConverter() {
@@ -35,13 +36,16 @@ public class SetConverter implements Converter<Set<?>> {
 	}
 
 	@Override
-	public Set<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+	public Set<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty,
+			GlobalConfiguration globalConfiguration) {
 		String[] value = StringUtils.delimitedListToStringArray(cellData.getStringValue(), ",");
-		return (Set<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class), new TypeDescriptor(contentProperty.getField()));
+		return (Set<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class),
+				new TypeDescriptor(contentProperty.getField()));
 	}
 
 	@Override
-	public CellData<String> convertToExcelData(Set<?> value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+	public CellData<String> convertToExcelData(Set<?> value, ExcelContentProperty contentProperty,
+			GlobalConfiguration globalConfiguration) {
 		return new CellData<>(StringUtils.collectionToCommaDelimitedString(value));
 	}
 
