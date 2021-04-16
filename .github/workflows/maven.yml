@@ -24,7 +24,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean install
     - name: spring-javaformat:validate
-      run: spring-javaformat:validate
+      run: mvn spring-javaformat:validate
       # 发送钉钉消息
     - name: build success
       if: ${{ success() }}
