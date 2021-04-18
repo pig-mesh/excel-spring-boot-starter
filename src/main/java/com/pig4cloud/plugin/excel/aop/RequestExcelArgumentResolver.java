@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ResolvableType;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -57,7 +60,14 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 		Class<?> excelModelClass = ResolvableType.forMethodParameter(parameter).getGeneric(0).resolve();
 
 		// 这里需要指定读用哪个 class 去读，然后读取第一个 sheet 文件流会自动关闭
-		EasyExcel.read(inputStream, excelModelClass, readListener).sheet().doRead();
+		EasyExcel.read(inputStream, excelModelClass, readListener).ignoreEmptyRow(requestExcel.ignoreEmptyRow()).sheet()
+				.doRead();
+
+		// 校验失败的数据处理 交给BindResult
+		WebDataBinder dataBinder = webDataBinderFactory.createBinder(webRequest, readListener.getErrors(), "excel");
+		ModelMap model = modelAndViewContainer.getModel();
+		model.put(BindingResult.MODEL_KEY_PREFIX + "excel", dataBinder.getBindingResult());
+
 		return readListener.getList();
 	}
 

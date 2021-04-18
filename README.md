@@ -222,7 +222,7 @@ public class Demo {
 
 - 测试表格
 
-![1618560470](https://minio.pigx.vip/oss/1618560470.png)
+![](https://minio.pigx.vip/oss/1618560470.png)
 
 ## 其他用法
 
