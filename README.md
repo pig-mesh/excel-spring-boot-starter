@@ -202,7 +202,10 @@ public List<DemoData> e1() {
 - 接口类定义List 接受表格对应的数据 使用 @RequestExcel 标记
 ```java
 @PostMapping
-public String req(@RequestExcel List<Demo> demoList) {
+public String req(@RequestExcel List<Demo> demoList, BindingResult bindingResult) {
+  // demoList 自动注入校验通过的数据
+  // bindingResult 获取到不合法的数据 其中 key 对应行号
+  Map<Long, Set<ConstraintViolation<DemoData>>> errorMap = (Map<Long, Set<ConstraintViolation<DemoData>>>) bindingResult.getTarget();
   return "success";
 }
 ```
