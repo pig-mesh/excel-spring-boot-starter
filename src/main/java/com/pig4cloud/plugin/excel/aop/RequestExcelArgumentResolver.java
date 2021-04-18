@@ -15,9 +15,11 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -38,11 +40,11 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 	@Override
 	@SneakyThrows
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer modelAndViewContainer,
-			NativeWebRequest webRequest, WebDataBinderFactory webDataBinderFactory) {
+								  NativeWebRequest webRequest, WebDataBinderFactory webDataBinderFactory) {
 		Class<?> parameterType = parameter.getParameterType();
 		if (!parameterType.isAssignableFrom(List.class)) {
 			throw new IllegalArgumentException(
-					"Excel upload request resolver error, @RequestExcel parameter is not List " + parameterType);
+				"Excel upload request resolver error, @RequestExcel parameter is not List " + parameterType);
 		}
 
 		// 处理自定义 readListener
@@ -54,14 +56,20 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 		// 获取请求文件流
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		assert request != null;
-		ServletInputStream inputStream = request.getInputStream();
+		InputStream inputStream = request.getInputStream();
+		if (inputStream == null) {
+			MultipartHttpServletRequest multipartHttpServletRequest = webRequest.getNativeRequest(MultipartHttpServletRequest.class);
+			MultipartFile file = multipartHttpServletRequest.getFile(requestExcel.fileName());
+			assert file != null;
+			inputStream = file.getInputStream();
+		}
 
 		// 获取目标类型
 		Class<?> excelModelClass = ResolvableType.forMethodParameter(parameter).getGeneric(0).resolve();
 
 		// 这里需要指定读用哪个 class 去读，然后读取第一个 sheet 文件流会自动关闭
 		EasyExcel.read(inputStream, excelModelClass, readListener).ignoreEmptyRow(requestExcel.ignoreEmptyRow()).sheet()
-				.doRead();
+			.doRead();
 
 		// 校验失败的数据处理 交给BindResult
 		WebDataBinder dataBinder = webDataBinderFactory.createBinder(webRequest, readListener.getErrors(), "excel");
