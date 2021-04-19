@@ -61,7 +61,8 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 			MultipartFile file = ((MultipartRequest) request).getFile(requestExcel.fileName());
 			assert file != null;
 			inputStream = file.getInputStream();
-		} else {
+		}
+		else {
 			inputStream = request.getInputStream();
 		}
 
