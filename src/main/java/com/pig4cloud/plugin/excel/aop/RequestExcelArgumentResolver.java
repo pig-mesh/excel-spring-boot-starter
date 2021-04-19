@@ -16,7 +16,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
@@ -56,13 +56,13 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 		// 获取请求文件流
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		assert request != null;
-		InputStream inputStream = request.getInputStream();
-		if (inputStream == null) {
-			MultipartHttpServletRequest multipartHttpServletRequest = webRequest
-					.getNativeRequest(MultipartHttpServletRequest.class);
-			MultipartFile file = multipartHttpServletRequest.getFile(requestExcel.fileName());
+		InputStream inputStream;
+		if (request instanceof MultipartRequest) {
+			MultipartFile file = ((MultipartRequest) request).getFile(requestExcel.fileName());
 			assert file != null;
 			inputStream = file.getInputStream();
+		} else {
+			inputStream = request.getInputStream();
 		}
 
 		// 获取目标类型
@@ -72,7 +72,7 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 		EasyExcel.read(inputStream, excelModelClass, readListener).ignoreEmptyRow(requestExcel.ignoreEmptyRow()).sheet()
 				.doRead();
 
-		// 校验失败的数据处理 交给BindResult
+		// 校验失败的数据处理 交给 BindResult
 		WebDataBinder dataBinder = webDataBinderFactory.createBinder(webRequest, readListener.getErrors(), "excel");
 		ModelMap model = modelAndViewContainer.getModel();
 		model.put(BindingResult.MODEL_KEY_PREFIX + "excel", dataBinder.getBindingResult());
