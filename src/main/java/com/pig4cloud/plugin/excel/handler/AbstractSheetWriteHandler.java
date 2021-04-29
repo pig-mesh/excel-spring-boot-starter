@@ -83,7 +83,7 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler {
 		}
 
 		if (responseExcel.exclude().length != 0) {
-			writerBuilder.excludeColumnFiledNames(Arrays.asList(responseExcel.include()));
+			writerBuilder.excludeColumnFiledNames(Arrays.asList(responseExcel.exclude()));
 		}
 
 		if (responseExcel.writeHandler().length != 0) {

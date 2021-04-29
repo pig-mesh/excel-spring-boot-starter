@@ -12,9 +12,39 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 <dependency>
     <groupId>com.pig4cloud.excel</groupId>
     <artifactId>excel-spring-boot-starter</artifactId>
-    <version>0.0.9</version>
+    <version>0.4.1</version>
 </dependency>
 ```
+
+## 读取 Excel
+
+- 接口类定义List 接受表格对应的数据 使用 @RequestExcel 标记
+```java
+@PostMapping
+public String req(@RequestExcel List<Demo> demoList, BindingResult bindingResult) {
+  // demoList 自动注入校验通过的数据
+  // bindingResult 获取到不合法的数据 其中 key 对应行号
+  Map<Long, Set<ConstraintViolation<DemoData>>> errorMap = (Map<Long, Set<ConstraintViolation<DemoData>>>) bindingResult.getTarget();
+  return "success";
+}
+```
+
+- 实体声明
+
+```java
+@Data
+public class Demo {
+  @ExcelProperty(index = 0)
+  private String username;
+
+  @ExcelProperty(index = 1)
+  private String password;
+}
+```
+
+- 测试表格
+
+![](https://minio.pigx.vip/oss/1618560470.png)
 
 ## Excel 读取（解析）
 
@@ -197,35 +227,6 @@ public List<DemoData> e1() {
 }
 ```
 
-## 读取 Excel
-
-- 接口类定义List 接受表格对应的数据 使用 @RequestExcel 标记
-```java
-@PostMapping
-public String req(@RequestExcel List<Demo> demoList, BindingResult bindingResult) {
-  // demoList 自动注入校验通过的数据
-  // bindingResult 获取到不合法的数据 其中 key 对应行号
-  Map<Long, Set<ConstraintViolation<DemoData>>> errorMap = (Map<Long, Set<ConstraintViolation<DemoData>>>) bindingResult.getTarget();
-  return "success";
-}
-```
-
-- 实体声明
-
-```java
-@Data
-public class Demo {
-  @ExcelProperty(index = 0)
-  private String username;
-
-  @ExcelProperty(index = 1)
-  private String password;
-}
-```
-
-- 测试表格
-
-![](https://minio.pigx.vip/oss/1618560470.png)
 
 ## 其他用法
 
