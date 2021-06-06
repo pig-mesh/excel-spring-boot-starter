@@ -1,7 +1,5 @@
 package com.pig4cloud.plugin.excel.head;
 
-import java.util.List;
-
 /**
  * Excel头生成器，用于自定义生成头部信息
  *
@@ -19,6 +17,6 @@ public interface HeadGenerator {
 	 * @param clazz 当前sheet的数据类型
 	 * @return List<List<String>> Head头信息
 	 */
-	List<List<String>> head(Class<?> clazz);
+	HeadMeta head(Class<?> clazz);
 
 }

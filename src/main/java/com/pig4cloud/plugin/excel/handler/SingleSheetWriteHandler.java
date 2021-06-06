@@ -2,12 +2,11 @@ package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.converters.Converter;
-import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.ObjectProvider;
 
@@ -21,12 +20,12 @@ import java.util.List;
  * <p>
  * 处理单sheet 页面
  */
-@RequiredArgsConstructor
 public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 
-	private final ExcelConfigProperties configProperties;
-
-	private final ObjectProvider<List<Converter<?>>> converterProvider;
+	public SingleSheetWriteHandler(ExcelConfigProperties configProperties,
+			ObjectProvider<List<Converter<?>>> converterProvider, WriterBuilderEnhancer excelWriterBuilderEnhance) {
+		super(configProperties, converterProvider, excelWriterBuilderEnhance);
+	}
 
 	/**
 	 * obj 是List 且list不为空同时list中的元素不是是List 才返回true
@@ -48,19 +47,14 @@ public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 	@SneakyThrows
 	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
 		List list = (List) obj;
-		ExcelWriter excelWriter = getExcelWriter(response, responseExcel, configProperties.getTemplatePath());
+		ExcelWriter excelWriter = getExcelWriter(response, responseExcel);
 
 		// 有模板则不指定sheet名
 		Class<?> dataClass = list.get(0).getClass();
-		WriteSheet sheet = this.sheet(null, responseExcel.sheet()[0], dataClass, responseExcel.template(),
+		WriteSheet sheet = this.sheet(responseExcel.sheets()[0], dataClass, responseExcel.template(),
 				responseExcel.headGenerator());
 		excelWriter.write(list, sheet);
 		excelWriter.finish();
-	}
-
-	@Override
-	public void registerCustomConverter(ExcelWriterBuilder builder) {
-		converterProvider.ifAvailable(converters -> converters.forEach(builder::registerConverter));
 	}
 
 }
