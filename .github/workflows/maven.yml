@@ -27,7 +27,7 @@ jobs:
       run: mvn spring-javaformat:validate
       # 发送钉钉消息
     - name: build success
-      if: ${{ success() }}
+      if: ${{ success() && github.event_name == 'push'}}
       uses: fifsky/dingtalk-action@master
       with:
         url: ${{ secrets.DINGTALK_WEBHOOK}}
@@ -37,7 +37,7 @@ jobs:
           > 云效构建: https://github.com/pig-mesh/excel-spring-boot-starter success
           > ^_^ from github action message
     - name: maven build failure
-      if: ${{ failure() }}
+      if: ${{ failure() && github.event_name == 'push' }}
       uses: fifsky/dingtalk-action@master
       with:
         url: ${{ secrets.DINGTALK_WEBHOOK}}
