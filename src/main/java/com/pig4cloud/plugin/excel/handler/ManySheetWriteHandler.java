@@ -2,12 +2,12 @@ package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.converters.Converter;
-import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
+import com.pig4cloud.plugin.excel.annotation.Sheet;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.ObjectProvider;
 
@@ -19,12 +19,12 @@ import java.util.List;
  * @author L.cm
  * @date 2020/3/29
  */
-@RequiredArgsConstructor
 public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 
-	private final ExcelConfigProperties configProperties;
-
-	private final ObjectProvider<List<Converter<?>>> converterProvider;
+	public ManySheetWriteHandler(ExcelConfigProperties configProperties,
+			ObjectProvider<List<Converter<?>>> converterProvider, WriterBuilderEnhancer excelWriterBuilderEnhance) {
+		super(configProperties, converterProvider, excelWriterBuilderEnhance);
+	}
 
 	/**
 	 * 当且仅当List不为空且List中的元素也是List 才返回true
@@ -46,26 +46,19 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	@SneakyThrows
 	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
 		List objList = (List) obj;
-		ExcelWriter excelWriter = getExcelWriter(response, responseExcel, configProperties.getTemplatePath());
+		ExcelWriter excelWriter = getExcelWriter(response, responseExcel);
 
-		String[] sheets = responseExcel.sheet();
+		Sheet[] sheets = responseExcel.sheets();
 		WriteSheet sheet;
 		for (int i = 0; i < sheets.length; i++) {
 			List eleList = (List) objList.get(i);
 			Class<?> dataClass = eleList.get(0).getClass();
-
 			// 创建sheet
-			sheet = this.sheet(i, responseExcel.sheet()[i], dataClass, responseExcel.template(),
-					responseExcel.headGenerator());
+			sheet = this.sheet(sheets[i], dataClass, responseExcel.template(), responseExcel.headGenerator());
 			// 写入sheet
-			excelWriter.write((List) objList.get(i), sheet);
+			excelWriter.write(eleList, sheet);
 		}
 		excelWriter.finish();
-	}
-
-	@Override
-	public void registerCustomConverter(ExcelWriterBuilder builder) {
-		converterProvider.ifAvailable(converters -> converters.forEach(builder::registerConverter));
 	}
 
 }

@@ -3,6 +3,8 @@ package com.pig4cloud.plugin.excel;
 import com.alibaba.excel.converters.Converter;
 import com.pig4cloud.plugin.excel.aop.ResponseExcelReturnValueHandler;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.enhance.DefaultWriterBuilderEnhancer;
+import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.handler.ManySheetWriteHandler;
 import com.pig4cloud.plugin.excel.handler.SheetWriteHandler;
 import com.pig4cloud.plugin.excel.handler.SingleSheetWriteHandler;
@@ -19,7 +21,7 @@ import java.util.List;
  * @version 1.0
  */
 @RequiredArgsConstructor
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class ExcelHandlerConfiguration {
 
 	private final ExcelConfigProperties configProperties;
@@ -27,12 +29,22 @@ public class ExcelHandlerConfiguration {
 	private final ObjectProvider<List<Converter<?>>> converterProvider;
 
 	/**
+	 * ExcelBuild增强
+	 * @return DefaultWriterBuilderEnhancer 默认什么也不做的增强器
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public WriterBuilderEnhancer writerBuilderEnhancer() {
+		return new DefaultWriterBuilderEnhancer();
+	}
+
+	/**
 	 * 单sheet 写入处理器
 	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public SingleSheetWriteHandler singleSheetWriteHandler() {
-		return new SingleSheetWriteHandler(configProperties, converterProvider);
+		return new SingleSheetWriteHandler(configProperties, converterProvider, writerBuilderEnhancer());
 	}
 
 	/**
@@ -41,7 +53,7 @@ public class ExcelHandlerConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public ManySheetWriteHandler manySheetWriteHandler() {
-		return new ManySheetWriteHandler(configProperties, converterProvider);
+		return new ManySheetWriteHandler(configProperties, converterProvider, writerBuilderEnhancer());
 	}
 
 	/**
