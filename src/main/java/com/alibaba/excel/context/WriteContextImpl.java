@@ -14,6 +14,7 @@ import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.alibaba.excel.write.property.ExcelWriteHeadProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.record.crypto.Biff8EncryptionKey;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
@@ -41,7 +42,12 @@ import java.util.UUID;
  *
  * @author jipengfei
  */
+@Slf4j
 public class WriteContextImpl implements WriteContext {
+
+	static {
+		log.debug("======[WriteContextImpl] 修复版被加载了=======");
+	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WriteContextImpl.class);
 

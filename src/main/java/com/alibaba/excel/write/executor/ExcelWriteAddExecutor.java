@@ -1,4 +1,4 @@
-package com.alibaba.excel.executor;
+package com.alibaba.excel.write.executor;
 
 import com.alibaba.excel.context.WriteContext;
 import com.alibaba.excel.enums.HeadKindEnum;
@@ -9,10 +9,10 @@ import com.alibaba.excel.util.ClassUtils;
 import com.alibaba.excel.util.CollectionUtils;
 import com.alibaba.excel.util.WorkBookUtil;
 import com.alibaba.excel.util.WriteHandlerUtils;
-import com.alibaba.excel.write.executor.AbstractExcelWriteExecutor;
 import com.alibaba.excel.write.metadata.holder.AbstractWriteHolder;
 import com.alibaba.excel.write.metadata.holder.WriteHolder;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,7 +25,12 @@ import java.util.*;
  *
  * @author Jiaju Zhuang
  */
+@Slf4j
 public class ExcelWriteAddExecutor extends AbstractExcelWriteExecutor {
+
+	static {
+		log.debug("======[ExcelWriteAddExecutor] 修复版被加载了=======");
+	}
 
 	public ExcelWriteAddExecutor(WriteContext writeContext) {
 		super(writeContext);

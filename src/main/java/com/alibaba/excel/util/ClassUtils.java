@@ -7,6 +7,7 @@ import com.alibaba.excel.exception.ExcelCommonException;
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Holder;
 import com.alibaba.excel.write.metadata.holder.WriteHolder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
@@ -19,7 +20,12 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Jiaju Zhuang
  **/
+@Slf4j
 public class ClassUtils {
+
+	static {
+		log.debug("======[ClassUtils] 修复版被加载了=======");
+	}
 
 	private static final Map<Class, SoftReference<FieldCache>> FIELD_CACHE = new ConcurrentHashMap<Class, SoftReference<FieldCache>>();
 
