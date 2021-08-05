@@ -12,7 +12,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 <dependency>
   <groupId>com.pig4cloud.excel</groupId>
   <artifactId>excel-spring-boot-starter</artifactId>
-  <version>0.4.1</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 
@@ -48,13 +48,23 @@ public class Demo {
 
 ## Excel 读取（解析）
 
-只需要在 `Controller` 层方法便增加 `@RequestExcel` 注解即可，该注解上可自定义 `readListener`。
+- 只需要在 `Controller` 层方法便增加 `@RequestExcel` 注解即可，该注解上可自定义 `readListener`。
 
 ```java
 @PostMapping("/upload")
 public void upload(@RequestExcel List<DemoData> dataList) {
 
   }
+```
+
+- 可以通过 BindingResult 获取实体注解 `@NotEmpty` 等校验失败的数据
+```java
+@PostMapping("/upload")
+public void upload(@RequestExcel List<DemoData> dataList, BindingResult bindingResult) {
+  // JSR 303 校验通用校验获取失败的数据
+  List<ErrorMessage> errorMessageList = (List<ErrorMessage>) bindingResult.getTarget();
+}
+
 ```
 
 ## Excel 生成
