@@ -19,14 +19,15 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 ## 读取 Excel
 
 - 接口类定义List 接受表格对应的数据 使用 @RequestExcel 标记
+
 ```java
-@PostMapping
-public String req(@RequestExcel List<Demo> demoList, BindingResult bindingResult) {
-  // demoList 自动注入校验通过的数据
-  // bindingResult 获取到不合法的数据 其中 key 对应行号
-  Map<Long, Set<ConstraintViolation<DemoData>>> errorMap = (Map<Long, Set<ConstraintViolation<DemoData>>>) bindingResult.getTarget();
-  return "success";
+```java
+@PostMapping("/upload")
+public void upload(@RequestExcel List<DemoData> dataList, BindingResult bindingResult) {
+  // JSR 303 校验通用校验获取失败的数据
+  List<ErrorMessage> errorMessageList = (List<ErrorMessage>) bindingResult.getTarget();
   }
+
 ```
 
 - 实体声明
@@ -46,28 +47,8 @@ public class Demo {
 
 ![](https://minio.pigx.vip/oss/1618560470.png)
 
-## Excel 读取（解析）
 
-- 只需要在 `Controller` 层方法便增加 `@RequestExcel` 注解即可，该注解上可自定义 `readListener`。
-
-```java
-@PostMapping("/upload")
-public void upload(@RequestExcel List<DemoData> dataList) {
-
-  }
-```
-
-- 可以通过 BindingResult 获取实体注解 `@NotEmpty` 等校验失败的数据
-```java
-@PostMapping("/upload")
-public void upload(@RequestExcel List<DemoData> dataList, BindingResult bindingResult) {
-  // JSR 303 校验通用校验获取失败的数据
-  List<ErrorMessage> errorMessageList = (List<ErrorMessage>) bindingResult.getTarget();
-}
-
-```
-
-## Excel 生成
+##  生成 Excel
 
 只需要在 `Controller` 层返回 List 并增加 `@ResponseExcel`注解即可
 
