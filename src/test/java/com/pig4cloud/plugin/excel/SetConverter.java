@@ -2,8 +2,9 @@ package com.pig4cloud.plugin.excel;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
+import com.alibaba.excel.metadata.data.ReadCellData;
+import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -36,7 +37,7 @@ public class SetConverter implements Converter<Set<?>> {
 	}
 
 	@Override
-	public Set<?> convertToJavaData(CellData cellData, ExcelContentProperty contentProperty,
+	public Set<?> convertToJavaData(ReadCellData cellData, ExcelContentProperty contentProperty,
 			GlobalConfiguration globalConfiguration) {
 		String[] value = StringUtils.delimitedListToStringArray(cellData.getStringValue(), ",");
 		return (Set<?>) conversionService.convert(value, TypeDescriptor.valueOf(String[].class),
@@ -44,9 +45,9 @@ public class SetConverter implements Converter<Set<?>> {
 	}
 
 	@Override
-	public CellData<String> convertToExcelData(Set<?> value, ExcelContentProperty contentProperty,
+	public WriteCellData<String> convertToExcelData(Set<?> value, ExcelContentProperty contentProperty,
 			GlobalConfiguration globalConfiguration) {
-		return new CellData<>(StringUtils.collectionToCommaDelimitedString(value));
+		return new WriteCellData<>(StringUtils.collectionToCommaDelimitedString(value));
 	}
 
 }

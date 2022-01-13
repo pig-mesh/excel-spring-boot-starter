@@ -46,7 +46,7 @@ public class Demo {
   @ExcelProperty(index = 1)
   private String password;
 }
-```
+```RequestExcel
 
 - 测试表格
 
