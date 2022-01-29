@@ -10,7 +10,8 @@ import java.util.Set;
  */
 public final class Validators {
 
-	private Validators() {}
+	private Validators() {
+	}
 
 	private static final Validator VALIDATOR;
 
