@@ -18,15 +18,15 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Void.class)
 @Import(value = { ListConverter.class, SetConverter.class })
-public class ConverterTest {
+class ConverterTest {
 
 	@Autowired
 	ObjectProvider<List<Converter<?>>> converterProvider;
 
 	@Test
-	public void test() {
+	void test() {
 		List<Converter<?>> ifAvailable = converterProvider.getIfAvailable();
-		Assertions.assertFalse(ifAvailable.isEmpty());
+		Assertions.assertFalse(ifAvailable == null || ifAvailable.isEmpty());
 	}
 
 }

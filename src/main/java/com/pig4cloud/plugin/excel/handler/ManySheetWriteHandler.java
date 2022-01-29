@@ -8,7 +8,6 @@ import com.pig4cloud.plugin.excel.annotation.Sheet;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
 import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.ObjectProvider;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,12 +28,12 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	/**
 	 * 当且仅当List不为空且List中的元素也是List 才返回true
 	 * @param obj 返回对象
-	 * @return
+	 * @return boolean
 	 */
 	@Override
 	public boolean support(Object obj) {
 		if (obj instanceof List) {
-			List objList = (List) obj;
+			List<?> objList = (List<?>) obj;
 			return !objList.isEmpty() && objList.get(0) instanceof List;
 		}
 		else {
@@ -43,15 +42,14 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	}
 
 	@Override
-	@SneakyThrows
 	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
-		List objList = (List) obj;
+		List<?> objList = (List<?>) obj;
 		ExcelWriter excelWriter = getExcelWriter(response, responseExcel);
 
 		Sheet[] sheets = responseExcel.sheets();
 		WriteSheet sheet;
 		for (int i = 0; i < sheets.length; i++) {
-			List eleList = (List) objList.get(i);
+			List<?> eleList = (List<?>) objList.get(i);
 			Class<?> dataClass = eleList.get(0).getClass();
 			// 创建sheet
 			sheet = this.sheet(sheets[i], dataClass, responseExcel.template(), responseExcel.headGenerator());

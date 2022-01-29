@@ -1,9 +1,10 @@
 package com.pig4cloud.plugin.excel.read;
 
 import com.alibaba.excel.EasyExcel;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
+
+import java.io.IOException;
 
 /**
  * 测试读取excel
@@ -11,7 +12,7 @@ import org.springframework.core.io.ClassPathResource;
  * @author lengleng
  * @date 2021/4/16
  */
-public class ReaderExcelTests {
+class ReaderExcelTests {
 
 	/**
 	 * 指定列的下标或者列名
@@ -24,16 +25,14 @@ public class ReaderExcelTests {
 	 * 3. 直接读即可
 	 */
 	@Test
-	@SneakyThrows
-	public void indexOrNameRead() {
+	void indexOrNameRead() throws IOException {
 		ClassPathResource classPathResource = new ClassPathResource("tmp/indexOrName.xlsx");
 		EasyExcel.read(classPathResource.getInputStream(), IndexOrNameData.class, new IndexOrNameDataListener()).sheet()
 				.doRead();
 	}
 
 	@Test
-	@SneakyThrows
-	public void indexOrNameRead1() {
+	void indexOrNameRead1() throws IOException {
 		ClassPathResource classPathResource = new ClassPathResource("tmp/indexOrName1.xlsx");
 		EasyExcel.read(classPathResource.getInputStream(), IndexOrNameData1.class, new IndexOrNameDataListener1())
 				.sheet().doRead();
