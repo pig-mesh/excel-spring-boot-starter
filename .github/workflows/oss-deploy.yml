@@ -1,11 +1,9 @@
 name: publish maven package
-
 on:
-  # 支持手动触发构建
   workflow_dispatch:
-  release:
-    # 创建release的时候触发
-    types: [published]
+  push:
+    tags:
+      - '*'
 
 jobs:
   oss-deploy:
