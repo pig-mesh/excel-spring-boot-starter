@@ -16,7 +16,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 <dependency>
   <groupId>com.pig4cloud.excel</groupId>
   <artifactId>excel-spring-boot-starter</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ public class Demo {
   @ExcelProperty(index = 1)
   private String password;
 }
-```RequestExcel
+```
 
 - 测试表格
 
@@ -82,6 +82,7 @@ public @interface ResponseExcel {
 ### 基础用法
 
 - 返回单 `sheet`, 全部字段导出
+- 
 ```java
 @ResponseExcel(name = "test", sheets = @Sheet(sheetName = "testSheet1"))
 @GetMapping("/e1")
