@@ -7,10 +7,10 @@ import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
 import com.pig4cloud.plugin.excel.processor.NameProcessor;
 import com.pig4cloud.plugin.excel.processor.NameSpelExpressionProcessor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
@@ -27,8 +27,8 @@ import java.util.List;
  * 配置初始化
  */
 @Import(ExcelHandlerConfiguration.class)
-@AutoConfiguration
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(ExcelConfigProperties.class)
 public class ResponseExcelAutoConfiguration {
 
