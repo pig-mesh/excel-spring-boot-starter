@@ -40,6 +40,7 @@
         <mica.version>2.3.0</mica.version>
         <spring.checkstyle.plugin>0.0.32</spring.checkstyle.plugin>
         <git.commit.plugin>2.2.5</git.commit.plugin>
+		<commons-compress>1.21</commons-compress>
     </properties>
 
     <dependencies>
@@ -61,7 +62,18 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>${easyexcel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-compress</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>${commons-compress}</version>
+		</dependency>
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
