@@ -46,7 +46,8 @@ public class DefaultAnalysisEventListener extends ListAnalysisEventListener<Obje
 					try {
 						field.setAccessible(true);
 						field.set(o, lineNum);
-					} catch (IllegalAccessException e) {
+					}
+					catch (IllegalAccessException e) {
 						e.printStackTrace();
 					}
 				}
