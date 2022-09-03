@@ -408,6 +408,17 @@ public class DemoData {
 	}
 ```
 
+- 导入获取excel 行号，实体属性增加 @ExcelLine 注解即可
+
+```java
+/**
+ * 导入时候回显行号
+ */
+@ExcelLine
+@ExcelIgnore
+private Long lineNum;
+```
+
 **使用 Postman 测试导入**
 
 ![](https://hccake-img.oss-cn-shanghai.aliyuncs.com/ballcat/doc/excel-i18n-import.png)
