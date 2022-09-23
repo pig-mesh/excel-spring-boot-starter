@@ -31,6 +31,9 @@ public class DefaultAnalysisEventListener extends ListAnalysisEventListener<Obje
 
 	@Override
 	public void invoke(Object o, AnalysisContext analysisContext) {
+		if(lineNull(o)){
+			return;
+		}
 		lineNum++;
 
 		Set<ConstraintViolation<Object>> violations = Validators.validate(o);
@@ -69,6 +72,29 @@ public class DefaultAnalysisEventListener extends ListAnalysisEventListener<Obje
 	@Override
 	public List<ErrorMessage> getErrors() {
 		return errorMessageList;
+	}
+	
+	/**
+	 * 所有字段都为空认为空行
+	 * @param line 行数据
+	 * @return 是否空行
+	 */
+	private boolean lineNull(Object line) {
+		if (line instanceof String) {
+			return StrUtil.isEmpty((String) line);
+		}
+		try {
+			Set<Field> fields = Arrays.stream(line.getClass().getDeclaredFields()).filter(f -> f.isAnnotationPresent(ExcelProperty.class)).collect(Collectors.toSet());
+			for (Field field : fields) {
+				field.setAccessible(true);
+				if (field.get(line) != null) {
+					return false;
+				}
+			}
+			return true;
+		} catch (Exception ignored) {
+		}
+		return true;
 	}
 
 }
