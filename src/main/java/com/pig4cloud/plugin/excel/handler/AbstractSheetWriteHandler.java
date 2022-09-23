@@ -93,7 +93,7 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 				.orElse("application/vnd.ms-excel");
 		response.setContentType(contentType);
 		response.setCharacterEncoding("utf-8");
-		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
+		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=utf-8''" + fileName);
 		write(o, response, responseExcel);
 	}
 
