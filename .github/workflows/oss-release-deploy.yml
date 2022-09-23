@@ -18,14 +18,6 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-#      - name: Build with Maven
-#        run: mvn -B package --file pom.xml
-
-#      - name: Publish to GitHub Packages Apache Maven
-#        run: mvn deploy
-#        env:
-#          GITHUB_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
-
       - name: Setup Maven Central
         uses: actions/setup-java@v3
         with: # overwrite settings.xml
@@ -38,7 +30,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Publish to Maven Central
-        run: mvn clean deploy -Dmaven.test.skip=true -P 'release'
+        run: mvn clean deploy -Dmaven.test.skip=true -P 'snapshot'
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
