@@ -12,6 +12,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 ## 依赖引用
 
 - 项目已上传至 maven 仓库，直接引入即可使用
+
 ```xml
 <dependency>
   <groupId>com.pig4cloud.excel</groupId>
@@ -20,6 +21,26 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 </dependency>
 ```
 
+- 使用快照版本
+
+```shell
+<dependency>
+  <groupId>com.pig4cloud.excel</groupId>
+  <artifactId>excel-spring-boot-starter</artifactId>
+  <version>1.2.7-SNAPSHOT</version>
+</dependency>
+
+  <repositories>
+      <repository>
+          <id>snapshots</id>
+          <name>Excel Snapshots</name>
+          <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+          <releases>
+              <enabled>false</enabled>
+          </releases>
+      </repository>
+  </repositories>
+```
 
 
 ## 导入 Excel
