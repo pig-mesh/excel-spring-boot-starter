@@ -18,6 +18,7 @@ import com.pig4cloud.plugin.excel.head.HeadGenerator;
 import com.pig4cloud.plugin.excel.head.HeadMeta;
 import com.pig4cloud.plugin.excel.head.I18nHeaderCellWriteHandler;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -37,7 +38,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

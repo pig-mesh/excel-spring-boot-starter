@@ -2,7 +2,7 @@ package com.pig4cloud.plugin.excel.handler;
 
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author lengleng
