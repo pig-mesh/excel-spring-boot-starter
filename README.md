@@ -27,7 +27,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 <dependency>
   <groupId>com.pig4cloud.excel</groupId>
   <artifactId>excel-spring-boot-starter</artifactId>
-  <version>1.2.8-SNAPSHOT</version>
+  <version>1.3.0-SNAPSHOT</version>
 </dependency>
 
   <repositories>
