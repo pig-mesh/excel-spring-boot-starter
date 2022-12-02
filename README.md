@@ -24,27 +24,6 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 </dependency>
 ```
 
-- 使用快照版本
-
-```shell
-<dependency>
-  <groupId>com.pig4cloud.excel</groupId>
-  <artifactId>excel-spring-boot-starter</artifactId>
-  <version>1.3.0-SNAPSHOT</version>
-</dependency>
-
-  <repositories>
-      <repository>
-          <id>snapshots</id>
-          <name>Excel Snapshots</name>
-          <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-          <releases>
-              <enabled>false</enabled>
-          </releases>
-      </repository>
-  </repositories>
-```
-
 ## 导入 Excel
 
 - 接口类定义List 接受表格对应的数据 使用 @RequestExcel 标记

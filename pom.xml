@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pig4cloud.excel</groupId>
     <artifactId>excel-spring-boot-starter</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>excel-spring-boot-starter</name>
     <description>easy and high performance excel</description>
     <url>https://pig4cloud.com</url>
@@ -35,9 +35,9 @@
         <url>https://gitee.wang/lengleng/pig.git</url>
     </scm>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <easyexcel.version>3.1.1</easyexcel.version>
-        <mica.version>2.3.1</mica.version>
+        <mica.version>3.0.0</mica.version>
         <spring.checkstyle.plugin>0.0.32</spring.checkstyle.plugin>
         <git.commit.plugin>2.2.5</git.commit.plugin>
 		<commons-compress>1.21</commons-compress>
@@ -135,14 +135,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
+                        <version>3.3.2</version>
                         <configuration>
                             <show>private</show>
                             <nohelp>true</nohelp>
                             <charset>UTF-8</charset>
                             <encoding>UTF-8</encoding>
                             <docencoding>UTF-8</docencoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <doclint>none</doclint>
                             <detectJavaApiLink>false</detectJavaApiLink>
                         </configuration>
                         <executions>
@@ -178,7 +178,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype</serverId>
@@ -219,14 +219,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
+                        <version>3.3.2</version>
                         <configuration>
                             <show>private</show>
                             <nohelp>true</nohelp>
                             <charset>UTF-8</charset>
                             <encoding>UTF-8</encoding>
                             <docencoding>UTF-8</docencoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <doclint>none</doclint>
                             <detectJavaApiLink>false</detectJavaApiLink>
                         </configuration>
                         <executions>
@@ -262,7 +262,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype</serverId>
