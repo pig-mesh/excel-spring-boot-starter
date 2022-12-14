@@ -7,41 +7,22 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 
 ![](http://pigx.vip/20200331165749_w0DXBK_Screenshot.jpeg)
 
-
-
 ## 依赖引用
 
 - 项目已上传至 maven 仓库，直接引入即可使用
+
+| 版本 | 支持 |
+|-------|--|
+| 3.0.0 | 适配 SpringBoot3.x |
+| 1.2.7 | 适配 SpringBoot2.x |
 
 ```xml
 <dependency>
   <groupId>com.pig4cloud.excel</groupId>
   <artifactId>excel-spring-boot-starter</artifactId>
-  <version>1.2.7</version>
+  <version>${lastVersion}</version>
 </dependency>
 ```
-
-- 使用快照版本
-
-```shell
-<dependency>
-  <groupId>com.pig4cloud.excel</groupId>
-  <artifactId>excel-spring-boot-starter</artifactId>
-  <version>1.3.0-SNAPSHOT</version>
-</dependency>
-
-  <repositories>
-      <repository>
-          <id>snapshots</id>
-          <name>Excel Snapshots</name>
-          <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-          <releases>
-              <enabled>false</enabled>
-          </releases>
-      </repository>
-  </repositories>
-```
-
 
 ## 导入 Excel
 
@@ -73,9 +54,7 @@ public class Demo {
 
 ![](https://minio.pigx.vip/oss/1618560470.png)
 
-
-
-##  导出 Excel
+## 导出 Excel
 
 只需要在 `Controller` 层返回 List 并增加 `@ResponseExcel`注解即可
 
@@ -98,12 +77,11 @@ public @interface ResponseExcel {
 }
 ```
 
-
-
 ### 基础用法
 
 - 返回单 `sheet`, 全部字段导出
-- 
+-
+
 ```java
 @ResponseExcel(name = "test", sheets = @Sheet(sheetName = "testSheet1"))
 @GetMapping("/e1")
@@ -145,7 +123,7 @@ public class DemoData {
 
 ![](http://pigx.vip/20200331163948_E91zjM_Screenshot.jpeg)
 
--  忽略部分字段
+- 忽略部分字段
 
 ```java
 @Data
@@ -158,9 +136,8 @@ public class DemoData {
 	private String password;
 }
 ```
+
 ![](http://pigx.vip/20200331164144_l2gwfD_Screenshot.jpeg)
-
-
 
 ### 导出并加密
 
@@ -173,10 +150,6 @@ public List<DemoData> e1() {
 ```
 
 ![](http://pigx.vip/20200331164945_6fsEsG_Screenshot.jpeg)
-
-
-
-
 
 ### 导出多sheet
 
@@ -195,8 +168,6 @@ public List<List<DemoData>> e1() {
 ```
 
 ![](http://pigx.vip/20200331164527_sbYDsC_Screenshot.jpeg)
-
-
 
 ### 导出不同的 Sheet
 
@@ -341,7 +312,11 @@ public class ExcelHeadTestController {
 
 国际化配置基于 Spring 的 MessageSource，开启国际化时，spring 容器中必须有一个 MessageSource 的 Bean。
 
-> 具体 Spring 的国际化使用这里不再展开，想要了解的可以参看官方文档 [Spring MessageSource 使用](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#context-functionality-messagesource) 以及 [SpringBoot 国际化配置 ](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.internationalization)
+> 具体 Spring
+>
+的国际化使用这里不再展开，想要了解的可以参看官方文档 [Spring MessageSource 使用](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#context-functionality-messagesource)
+>
+以及 [SpringBoot 国际化配置 ](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.internationalization)
 
 
 
@@ -368,8 +343,6 @@ public class ExcelHeadTestController {
   DemoData.age=年龄
   ```
 
-
-
 **测试类的注解信息上，使用 `{}` 标记配置文件中的 key**
 
 ```java
@@ -381,8 +354,6 @@ public class DemoData {
 	private Integer age;
 }
 ```
-
-
 
 **导出注解上设置 i18nHeader=true **
 
@@ -413,8 +384,6 @@ public class DemoData {
 
 ![导出效果](https://hccake-img.oss-cn-shanghai.aliyuncs.com/ballcat/doc/excel-i18n-export2.png)
 
-
-
 **导入 controller**
 
 注意，这里导入接受的对象如果和导出是同一个的话，由于列名是国际化配置的占位符，无法和实际上传文件进行对应，所以需要给该对象的属性指定 index，导入文件根据 index 进行数据映射。
@@ -444,15 +413,12 @@ private Long lineNum;
 
 ![](https://hccake-img.oss-cn-shanghai.aliyuncs.com/ballcat/doc/excel-i18n-import.png)
 
-
-
-
-
 ## 添加全局自定义转换器（Converter）
 
 `0.0.7` 版本开始添加了全局自定义转换器注入的功能，你只需要将自定义的 `Converter` 注册成 `Spring bean` 即可。
 
 示例代码如下（对 set 类型转换）：
+
 ```java
 @Data
 public class TestModel {
@@ -506,8 +472,6 @@ public List<DemoData> e1() {
     return list();
 }
 ```
-
-
 
 ## 其他用法
 
