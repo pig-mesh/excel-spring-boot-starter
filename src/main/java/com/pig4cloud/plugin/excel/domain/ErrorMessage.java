@@ -1,4 +1,4 @@
-package com.pig4cloud.plugin.excel.vo;
+package com.pig4cloud.plugin.excel.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
