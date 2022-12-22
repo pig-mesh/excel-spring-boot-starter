@@ -1,15 +1,15 @@
 package com.pig4cloud.plugin.excel.handler;
 
-import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
+import com.pig4cloud.plugin.excel.annotation.Sheet;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.domain.SheetBuildProperties;
 import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * @author lengleng
  * @author L.cm
+ * @author Hccake
  * @date 2020/3/29
  * <p>
  * 处理单sheet 页面
@@ -49,25 +50,38 @@ public class SingleSheetWriteHandler extends AbstractSheetWriteHandler {
 		List<?> eleList = (List<?>) obj;
 		ExcelWriter excelWriter = getExcelWriter(response, responseExcel);
 
-		WriteSheet sheet;
-		if (CollectionUtils.isEmpty(eleList)) {
-			sheet = EasyExcel.writerSheet(responseExcel.sheets()[0].sheetName()).build();
+		// 获取 Sheet 配置
+		SheetBuildProperties sheetBuildProperties;
+		Sheet[] sheets = responseExcel.sheets();
+		if (sheets != null && sheets.length > 0) {
+			sheetBuildProperties = new SheetBuildProperties(sheets[0]);
 		}
 		else {
-			// 有模板则不指定sheet名
-			Class<?> dataClass = eleList.get(0).getClass();
-			sheet = this.sheet(responseExcel.sheets()[0], dataClass, responseExcel.template(),
-					responseExcel.headGenerator());
+			sheetBuildProperties = new SheetBuildProperties(0);
 		}
 
-		// 填充 sheet
+		// 模板信息
+		String template = responseExcel.template();
+
+		// 创建sheet
+		WriteSheet sheet;
+		if (eleList.isEmpty()) {
+			sheet = this.emptySheet(sheetBuildProperties, template);
+		}
+		else {
+			Class<?> dataClass = eleList.get(0).getClass();
+			sheet = this.emptySheet(sheetBuildProperties, dataClass, template, responseExcel.headGenerator());
+		}
+
 		if (responseExcel.fill()) {
+			// 填充 sheet
 			excelWriter.fill(eleList, sheet);
 		}
 		else {
-			// 写入sheet
+			// 写入 sheet
 			excelWriter.write(eleList, sheet);
 		}
+
 		excelWriter.finish();
 	}
 

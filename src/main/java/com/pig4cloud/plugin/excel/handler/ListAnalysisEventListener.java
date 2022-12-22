@@ -1,7 +1,7 @@
 package com.pig4cloud.plugin.excel.handler;
 
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.pig4cloud.plugin.excel.vo.ErrorMessage;
+import com.pig4cloud.plugin.excel.domain.ErrorMessage;
 
 import java.util.List;
 

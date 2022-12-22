@@ -1,23 +1,24 @@
 package com.pig4cloud.plugin.excel.handler;
 
-import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.annotation.Sheet;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.domain.SheetBuildProperties;
 import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.kit.ExcelException;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author lengleng
  * @author L.cm
+ * @author Hccake
  * @date 2020/3/29
  */
 public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
@@ -46,33 +47,60 @@ public class ManySheetWriteHandler extends AbstractSheetWriteHandler {
 	@Override
 	public void write(Object obj, HttpServletResponse response, ResponseExcel responseExcel) {
 		List<?> objList = (List<?>) obj;
+		int objListSize = objList.size();
+
+		String template = responseExcel.template();
+
 		ExcelWriter excelWriter = getExcelWriter(response, responseExcel);
+		List<SheetBuildProperties> sheetBuildPropertiesList = getSheetBuildProperties(responseExcel, objListSize);
 
-		Sheet[] sheets = responseExcel.sheets();
-		WriteSheet sheet;
-		for (int i = 0; i < sheets.length; i++) {
-			List<?> eleList = (List<?>) objList.get(i);
-
-			if (CollectionUtils.isEmpty(eleList)) {
-				sheet = EasyExcel.writerSheet(responseExcel.sheets()[i].sheetName()).build();
+		for (int i = 0; i < sheetBuildPropertiesList.size(); i++) {
+			SheetBuildProperties sheetBuildProperties = sheetBuildPropertiesList.get(i);
+			// 创建sheet
+			WriteSheet sheet;
+			List<?> eleList;
+			if (objListSize <= i) {
+				eleList = new ArrayList<>();
+				sheet = this.emptySheet(sheetBuildProperties, template);
 			}
 			else {
-				// 有模板则不指定sheet名
-				Class<?> dataClass = eleList.get(0).getClass();
-				sheet = this.sheet(responseExcel.sheets()[i], dataClass, responseExcel.template(),
-						responseExcel.headGenerator());
+				eleList = (List<?>) objList.get(i);
+				if (eleList.isEmpty()) {
+					sheet = this.emptySheet(sheetBuildProperties, template);
+				}
+				else {
+					Class<?> dataClass = eleList.get(0).getClass();
+					sheet = this.emptySheet(sheetBuildProperties, dataClass, template, responseExcel.headGenerator());
+				}
 			}
 
-			// 填充 sheet
 			if (responseExcel.fill()) {
+				// 填充 sheet
 				excelWriter.fill(eleList, sheet);
 			}
 			else {
-				// 写入sheet
+				// 写入 sheet
 				excelWriter.write(eleList, sheet);
 			}
 		}
+
 		excelWriter.finish();
+	}
+
+	private static List<SheetBuildProperties> getSheetBuildProperties(ResponseExcel responseExcel, int objListSize) {
+		List<SheetBuildProperties> sheetBuildPropertiesList = new ArrayList<>();
+		Sheet[] sheets = responseExcel.sheets();
+		if (sheets != null && sheets.length > 0) {
+			for (Sheet sheet : sheets) {
+				sheetBuildPropertiesList.add(new SheetBuildProperties(sheet));
+			}
+		}
+		else {
+			for (int i = 0; i < objListSize; i++) {
+				sheetBuildPropertiesList.add(new SheetBuildProperties(i));
+			}
+		}
+		return sheetBuildPropertiesList;
 	}
 
 }

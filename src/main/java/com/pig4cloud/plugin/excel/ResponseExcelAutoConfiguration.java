@@ -4,6 +4,7 @@ import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
 import com.pig4cloud.plugin.excel.aop.RequestExcelArgumentResolver;
 import com.pig4cloud.plugin.excel.aop.ResponseExcelReturnValueHandler;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
+import com.pig4cloud.plugin.excel.head.EmptyHeadGenerator;
 import com.pig4cloud.plugin.excel.processor.NameProcessor;
 import com.pig4cloud.plugin.excel.processor.NameSpelExpressionProcessor;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,16 @@ public class ResponseExcelAutoConfiguration {
 		assert returnValueHandlers != null;
 		newHandlers.addAll(returnValueHandlers);
 		requestMappingHandlerAdapter.setReturnValueHandlers(newHandlers);
+	}
+
+	/**
+	 * 空的 Excel 头生成器
+	 * @return EmptyHeadGenerator
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public EmptyHeadGenerator emptyHeadGenerator() {
+		return new EmptyHeadGenerator();
 	}
 
 	/**
