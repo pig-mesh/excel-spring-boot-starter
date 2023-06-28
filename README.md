@@ -11,9 +11,9 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 
 - 项目已上传至 maven 仓库，直接引入即可使用
 
-| 版本 | 支持 |
+| 版本    | 支持 |
 |-------|--|
-| 3.0.0 | 适配 SpringBoot3.x |
+| 3.1.0 | 适配 SpringBoot3.x |
 | 1.2.7 | 适配 SpringBoot2.x |
 
 ```xml
@@ -466,6 +466,10 @@ public class SetConverter implements Converter<Set<?>> {
 ## 高级用法模板导出
 
 ```java
+/**
+ * 默认读取 classpath:excel/ 目录下的模板文件，具体模板使用参考官方文档
+ *
+ */
 @ResponseExcel(name = "模板测试excel", sheet = "sheetName",template = "example.xlsx")
 @GetMapping("/e1")
 public List<DemoData> e1() {
