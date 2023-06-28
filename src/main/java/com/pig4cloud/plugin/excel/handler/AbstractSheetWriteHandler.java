@@ -82,15 +82,16 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 	public void export(Object o, HttpServletResponse response, ResponseExcel responseExcel) {
 		check(responseExcel);
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		String name = (String) Objects.requireNonNull(requestAttributes).getAttribute(DynamicNameAspect.EXCEL_NAME_KEY,
-				RequestAttributes.SCOPE_REQUEST);
+		String name = (String) Objects.requireNonNull(requestAttributes)
+			.getAttribute(DynamicNameAspect.EXCEL_NAME_KEY, RequestAttributes.SCOPE_REQUEST);
 		if (name == null) {
 			name = UUID.randomUUID().toString();
 		}
 		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
 		// 根据实际的文件类型找到对应的 contentType
-		String contentType = MediaTypeFactory.getMediaType(fileName).map(MediaType::toString)
-				.orElse("application/vnd.ms-excel");
+		String contentType = MediaTypeFactory.getMediaType(fileName)
+			.map(MediaType::toString)
+			.orElse("application/vnd.ms-excel");
 		response.setContentType(contentType);
 		response.setCharacterEncoding("utf-8");
 		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=utf-8''" + fileName);
@@ -106,9 +107,11 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 	@SneakyThrows(IOException.class)
 	public ExcelWriter getExcelWriter(HttpServletResponse response, ResponseExcel responseExcel) {
 		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream())
-				.registerConverter(LocalDateStringConverter.INSTANCE)
-				.registerConverter(LocalDateTimeStringConverter.INSTANCE).autoCloseStream(true)
-				.excelType(responseExcel.suffix()).inMemory(responseExcel.inMemory());
+			.registerConverter(LocalDateStringConverter.INSTANCE)
+			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
+			.autoCloseStream(true)
+			.excelType(responseExcel.suffix())
+			.inMemory(responseExcel.inMemory());
 
 		if (StringUtils.hasText(responseExcel.password())) {
 			writerBuilder.password(responseExcel.password());
