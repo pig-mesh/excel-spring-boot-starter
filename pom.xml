@@ -40,7 +40,7 @@
         <mica.version>3.0.0</mica.version>
         <spring.checkstyle.plugin>0.0.39</spring.checkstyle.plugin>
         <git.commit.plugin>2.2.5</git.commit.plugin>
-		<commons-compress>1.21</commons-compress>
+		<commons-compress>1.26.0</commons-compress>
     </properties>
 
     <dependencies>
