@@ -1,9 +1,13 @@
 name: publish github release
+
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
+    inputs:
+      releaseversion:
+        description: 'Release version'
+        required: true
+        default: '3.2.0'
+
 
 jobs:
   publish-github-release:
