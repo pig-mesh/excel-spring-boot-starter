@@ -5,7 +5,6 @@
 EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目。在尽可能节约内存的情况下支持读写百M的Excel。
 64M内存1分钟内读取75M(46W行25列)的Excel,当然还有急速模式能更快，但是内存占用会在100M多一点
 
-![](http://pigx.vip/20200331165749_w0DXBK_Screenshot.jpeg)
 
 ## 依赖引用
 
@@ -13,7 +12,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 
 | 版本    | 支持 |
 |-------|--|
-| 3.1.1 | 适配 SpringBoot3.x |
+| 3.2.0 | 适配 SpringBoot3.x |
 | 1.2.7 | 适配 SpringBoot2.x |
 
 ```xml
