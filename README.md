@@ -138,6 +138,18 @@ public class DemoData {
 
 ![](http://pigx.vip/20200331164144_l2gwfD_Screenshot.jpeg)
 
+### 导出动态文件名
+
+**ResponseExcel name属性支持 SpEL 表达式获取参数列表动态输出文件名**
+
+```java
+@ResponseExcel(name = "#param + '导出'")
+@GetMapping("/export")
+public List<DemoData> export(String param) {
+	return list;
+}
+```
+
 ### 导出并加密
 
 ```java
@@ -354,7 +366,7 @@ public class DemoData {
 }
 ```
 
-**导出注解上设置 i18nHeader=true **
+**导出注解上设置 i18nHeader=true**
 
 ```java
 	@ResponseExcel(name = "i18nExport", i18nHeader = true)
