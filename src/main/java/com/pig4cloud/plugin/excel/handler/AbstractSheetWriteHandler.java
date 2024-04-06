@@ -11,8 +11,7 @@ import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import com.pig4cloud.plugin.excel.annotation.Sheet;
 import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
-import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
-import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
+import com.pig4cloud.plugin.excel.converters.*;
 import com.pig4cloud.plugin.excel.enhance.WriterBuilderEnhancer;
 import com.pig4cloud.plugin.excel.head.HeadGenerator;
 import com.pig4cloud.plugin.excel.head.HeadMeta;
@@ -110,6 +109,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 		ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream())
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
+			.registerConverter(LocalTimeStringConverter.INSTANCE)
+			.registerConverter(LongStringConverter.INSTANCE)
+			.registerConverter(StringArrayConverter.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());

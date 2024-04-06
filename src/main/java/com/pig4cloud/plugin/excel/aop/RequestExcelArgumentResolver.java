@@ -2,8 +2,7 @@ package com.pig4cloud.plugin.excel.aop;
 
 import com.alibaba.excel.EasyExcel;
 import com.pig4cloud.plugin.excel.annotation.RequestExcel;
-import com.pig4cloud.plugin.excel.converters.LocalDateStringConverter;
-import com.pig4cloud.plugin.excel.converters.LocalDateTimeStringConverter;
+import com.pig4cloud.plugin.excel.converters.*;
 import com.pig4cloud.plugin.excel.handler.ListAnalysisEventListener;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
@@ -74,6 +73,9 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 		EasyExcel.read(inputStream, excelModelClass, readListener)
 			.registerConverter(LocalDateStringConverter.INSTANCE)
 			.registerConverter(LocalDateTimeStringConverter.INSTANCE)
+			.registerConverter(LocalTimeStringConverter.INSTANCE)
+			.registerConverter(LongStringConverter.INSTANCE)
+			.registerConverter(StringArrayConverter.INSTANCE)
 			.ignoreEmptyRow(requestExcel.ignoreEmptyRow())
 			.sheet()
 			.headRowNumber(requestExcel.headRowNumber())

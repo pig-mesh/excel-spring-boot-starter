@@ -12,7 +12,7 @@ EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目�
 
 | 版本    | 支持 |
 |-------|--|
-| 3.2.0 | 适配 SpringBoot3.x |
+| 3.2.1 | 适配 SpringBoot3.x |
 | 1.2.7 | 适配 SpringBoot2.x |
 
 ```xml
