@@ -38,7 +38,7 @@
         <java.version>17</java.version>
         <easyexcel.version>4.0.0</easyexcel.version>
         <mica.version>3.1.4</mica.version>
-        <spring.checkstyle.plugin>0.0.42</spring.checkstyle.plugin>
+        <spring.checkstyle.plugin>0.0.43</spring.checkstyle.plugin>
         <git.commit.plugin>4.9.10</git.commit.plugin>
 		<commons-compress>1.26.2</commons-compress>
     </properties>
