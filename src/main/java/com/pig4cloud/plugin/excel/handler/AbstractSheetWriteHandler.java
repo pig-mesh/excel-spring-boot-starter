@@ -112,6 +112,7 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 			.registerConverter(LocalTimeStringConverter.INSTANCE)
 			.registerConverter(LongStringConverter.INSTANCE)
 			.registerConverter(StringArrayConverter.INSTANCE)
+			.registerConverter(DictTypeConvert.INSTANCE)
 			.autoCloseStream(true)
 			.excelType(responseExcel.suffix())
 			.inMemory(responseExcel.inMemory());

@@ -149,6 +149,49 @@ public List<DemoData> export(String param) {
 	return list;
 }
 ```
+### 字典转换
+
+- 方式一： 固定枚举
+
+```java
+	@ExcelProperty(value = "列1")
+	// 指定对应的枚举类 （字符串）
+	@DictTypeProperty(enums = SexEnum.class)
+	private String sex;
+```
+
+```java
+@Getter
+@RequiredArgsConstructor
+// 必须继承 DictEnum
+public enum SexEnum implements DictEnum {
+  MALE("0", "男"),
+  FEMALE("1", "女");
+  // 必须有的字段 
+  private final String value;
+  // 必须有的字段
+  private final String label;
+}
+```
+
+- 方式二： 读取系统字典
+
+```java
+@Autowired
+private DictDataProvider dictDataProvider;
+
+// 在系统启动完毕后，添加字典数据
+dictDataProvider.addDict("sex_type", "0", "男");
+dictDataProvider.addDict("sex_type", "1", "女");
+```
+
+```java
+@ExcelProperty(value = "列1")
+// 指定对应的字典类型
+@DictTypeProperty("sex_type")
+private String sex;
+```
+
 
 ### 导出并加密
 

@@ -76,6 +76,7 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 			.registerConverter(LocalTimeStringConverter.INSTANCE)
 			.registerConverter(LongStringConverter.INSTANCE)
 			.registerConverter(StringArrayConverter.INSTANCE)
+			.registerConverter(DictTypeConvert.INSTANCE)
 			.ignoreEmptyRow(requestExcel.ignoreEmptyRow())
 			.sheet()
 			.headRowNumber(requestExcel.headRowNumber())
