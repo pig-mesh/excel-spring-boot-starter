@@ -1,6 +1,8 @@
 package com.pig4cloud.plugin.excel.vo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -57,6 +59,45 @@ public interface DictEnum {
 			.map(DictEnum::getValue)
 			.findFirst()
 			.orElse(null);
+	}
+
+	/**
+	 * 构建枚举类目
+	 * @param value 价值
+	 * @param label 标签
+	 * @return {@link DictEnum }
+	 */
+	static DictEnum of(String value, String label) {
+		return new DictEnum() {
+			@Override
+			public String getValue() {
+				return value;
+			}
+
+			@Override
+			public String getLabel() {
+				return label;
+			}
+		};
+	}
+
+	static Builder builder() {
+		return new Builder();
+	}
+
+	class Builder {
+
+		private final List<DictEnum> items = new ArrayList<>();
+
+		public Builder add(String value, String label) {
+			items.add(DictEnum.of(value, label));
+			return this;
+		}
+
+		public DictEnum[] build() {
+			return items.toArray(new DictEnum[0]);
+		}
+
 	}
 
 }

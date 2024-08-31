@@ -17,7 +17,7 @@ public class IndexOrNameData3 {
 	 * 读取第一列
 	 */
 	@ExcelProperty(value = "列1")
-	@DictTypeProperty("sex_type")
+	@DictTypeProperty("sex_txype")
 	private String sex;
 
 }

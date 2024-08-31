@@ -145,6 +145,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 			writerBuilder.registerConverter(BeanUtils.instantiateClass(clazz));
 		}
 
+		// 注册 Workbook 清空Dict处理器
+		writerBuilder.registerWriteHandler(new DictCacheClearSheetWriteHandler());
+
 		String templatePath = configProperties.getTemplatePath();
 		if (StringUtils.hasText(responseExcel.template())) {
 			ClassPathResource classPathResource = new ClassPathResource(

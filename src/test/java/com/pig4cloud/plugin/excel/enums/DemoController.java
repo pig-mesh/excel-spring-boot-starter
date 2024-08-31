@@ -48,7 +48,7 @@ public class DemoController {
 	}
 
 	@PostMapping("/upload")
-	public void upload(@RequestExcel List<IndexOrNameData2> dataList, BindingResult bindingResult) {
+	public void upload(@RequestExcel List<IndexOrNameData3> dataList, BindingResult bindingResult) {
 		// JSR 303 校验通用校验获取失败的数据
 		List<ErrorMessage> errorMessageList = (List<ErrorMessage>) bindingResult.getTarget();
 	}

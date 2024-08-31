@@ -3,6 +3,7 @@ package com.pig4cloud.plugin.excel.aop;
 import com.alibaba.excel.EasyExcel;
 import com.pig4cloud.plugin.excel.annotation.RequestExcel;
 import com.pig4cloud.plugin.excel.converters.*;
+import com.pig4cloud.plugin.excel.handler.DictCacheClearAnalysisEventListener;
 import com.pig4cloud.plugin.excel.handler.ListAnalysisEventListener;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
@@ -77,6 +78,7 @@ public class RequestExcelArgumentResolver implements HandlerMethodArgumentResolv
 			.registerConverter(LongStringConverter.INSTANCE)
 			.registerConverter(StringArrayConverter.INSTANCE)
 			.registerConverter(DictTypeConvert.INSTANCE)
+			.registerReadListener(new DictCacheClearAnalysisEventListener())
 			.ignoreEmptyRow(requestExcel.ignoreEmptyRow())
 			.sheet()
 			.headRowNumber(requestExcel.headRowNumber())

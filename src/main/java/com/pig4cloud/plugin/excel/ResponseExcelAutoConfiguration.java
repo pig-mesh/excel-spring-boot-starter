@@ -4,8 +4,6 @@ import com.pig4cloud.plugin.excel.aop.DynamicNameAspect;
 import com.pig4cloud.plugin.excel.aop.RequestExcelArgumentResolver;
 import com.pig4cloud.plugin.excel.aop.ResponseExcelReturnValueHandler;
 import com.pig4cloud.plugin.excel.config.ExcelConfigProperties;
-import com.pig4cloud.plugin.excel.handler.DefaultDictDataProvider;
-import com.pig4cloud.plugin.excel.handler.DictDataProvider;
 import com.pig4cloud.plugin.excel.kit.SpringContextKit;
 import com.pig4cloud.plugin.excel.processor.NameProcessor;
 import com.pig4cloud.plugin.excel.processor.NameSpelExpressionProcessor;
@@ -85,12 +83,6 @@ public class ResponseExcelAutoConfiguration {
 		resolverList.add(new RequestExcelArgumentResolver());
 		resolverList.addAll(argumentResolvers);
 		requestMappingHandlerAdapter.setArgumentResolvers(resolverList);
-	}
-
-	@Bean
-	@ConditionalOnMissingBean
-	public DictDataProvider dictDataProvider() {
-		return new DefaultDictDataProvider();
 	}
 
 }

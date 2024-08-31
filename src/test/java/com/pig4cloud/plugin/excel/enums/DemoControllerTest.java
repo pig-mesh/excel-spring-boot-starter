@@ -1,6 +1,5 @@
 package com.pig4cloud.plugin.excel.enums;
 
-import com.pig4cloud.plugin.excel.handler.DictDataProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,18 +55,12 @@ public class DemoControllerTest {
 		saveFileToResources("downloaded-example.xlsx", fileContent);
 	}
 
-	@Autowired
-	private DictDataProvider dictDataProvider;
-
 	/**
 	 * 单元测试，写出excel 字段指定枚举 type
 	 * @throws Exception
 	 */
 	@Test
 	void test2FileDownloadAndSave() throws Exception {
-		dictDataProvider.addDict("sex_type", "0", "男");
-		dictDataProvider.addDict("sex_type", "1", "女");
-
 		MvcResult result = mockMvc.perform(get("/demo/test2")).andExpect(status().isOk()).andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
