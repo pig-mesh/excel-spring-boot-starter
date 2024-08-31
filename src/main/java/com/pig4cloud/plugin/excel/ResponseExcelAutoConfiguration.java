@@ -31,67 +31,66 @@ import java.util.List;
  */
 @AutoConfiguration
 @RequiredArgsConstructor
-@Import({ExcelHandlerConfiguration.class, SpringContextKit.class})
+@Import({ ExcelHandlerConfiguration.class, SpringContextKit.class })
 @EnableConfigurationProperties(ExcelConfigProperties.class)
 public class ResponseExcelAutoConfiguration {
 
-    private final RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+	private final RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 
-    private final ResponseExcelReturnValueHandler responseExcelReturnValueHandler;
+	private final ResponseExcelReturnValueHandler responseExcelReturnValueHandler;
 
-    /**
-     * SPEL 解析处理器
-     *
-     * @return NameProcessor excel名称解析器
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public NameProcessor nameProcessor() {
-        return new NameSpelExpressionProcessor();
-    }
+	/**
+	 * SPEL 解析处理器
+	 * @return NameProcessor excel名称解析器
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public NameProcessor nameProcessor() {
+		return new NameSpelExpressionProcessor();
+	}
 
-    /**
-     * Excel名称解析处理切面
-     *
-     * @param nameProcessor SPEL 解析处理器
-     * @return DynamicNameAspect
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public DynamicNameAspect dynamicNameAspect(NameProcessor nameProcessor) {
-        return new DynamicNameAspect(nameProcessor);
-    }
+	/**
+	 * Excel名称解析处理切面
+	 * @param nameProcessor SPEL 解析处理器
+	 * @return DynamicNameAspect
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public DynamicNameAspect dynamicNameAspect(NameProcessor nameProcessor) {
+		return new DynamicNameAspect(nameProcessor);
+	}
 
-    /**
-     * 追加 Excel返回值处理器 到 springmvc 中
-     */
-    @PostConstruct
-    public void setReturnValueHandlers() {
-        List<HandlerMethodReturnValueHandler> returnValueHandlers = requestMappingHandlerAdapter
-                .getReturnValueHandlers();
+	/**
+	 * 追加 Excel返回值处理器 到 springmvc 中
+	 */
+	@PostConstruct
+	public void setReturnValueHandlers() {
+		List<HandlerMethodReturnValueHandler> returnValueHandlers = requestMappingHandlerAdapter
+			.getReturnValueHandlers();
 
-        List<HandlerMethodReturnValueHandler> newHandlers = new ArrayList<>();
-        newHandlers.add(responseExcelReturnValueHandler);
-        assert returnValueHandlers != null;
-        newHandlers.addAll(returnValueHandlers);
-        requestMappingHandlerAdapter.setReturnValueHandlers(newHandlers);
-    }
+		List<HandlerMethodReturnValueHandler> newHandlers = new ArrayList<>();
+		newHandlers.add(responseExcelReturnValueHandler);
+		assert returnValueHandlers != null;
+		newHandlers.addAll(returnValueHandlers);
+		requestMappingHandlerAdapter.setReturnValueHandlers(newHandlers);
+	}
 
-    /**
-     * 追加 Excel 请求处理器 到 springmvc 中
-     */
-    @PostConstruct
-    public void setRequestExcelArgumentResolver() {
-        List<HandlerMethodArgumentResolver> argumentResolvers = requestMappingHandlerAdapter.getArgumentResolvers();
-        List<HandlerMethodArgumentResolver> resolverList = new ArrayList<>();
-        resolverList.add(new RequestExcelArgumentResolver());
-        resolverList.addAll(argumentResolvers);
-        requestMappingHandlerAdapter.setArgumentResolvers(resolverList);
-    }
+	/**
+	 * 追加 Excel 请求处理器 到 springmvc 中
+	 */
+	@PostConstruct
+	public void setRequestExcelArgumentResolver() {
+		List<HandlerMethodArgumentResolver> argumentResolvers = requestMappingHandlerAdapter.getArgumentResolvers();
+		List<HandlerMethodArgumentResolver> resolverList = new ArrayList<>();
+		resolverList.add(new RequestExcelArgumentResolver());
+		resolverList.addAll(argumentResolvers);
+		requestMappingHandlerAdapter.setArgumentResolvers(resolverList);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public DictDataProvider dictDataProvider() {
-        return new DefaultDictDataProvider();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public DictDataProvider dictDataProvider() {
+		return new DefaultDictDataProvider();
+	}
+
 }
