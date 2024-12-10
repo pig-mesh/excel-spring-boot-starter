@@ -1,6 +1,6 @@
 package com.pig4cloud.plugin.excel.aop;
 
-import com.alibaba.excel.EasyExcel;
+import cn.idev.excel.EasyExcel;
 import com.pig4cloud.plugin.excel.annotation.RequestExcel;
 import com.pig4cloud.plugin.excel.converters.*;
 import com.pig4cloud.plugin.excel.handler.DictCacheClearAnalysisEventListener;

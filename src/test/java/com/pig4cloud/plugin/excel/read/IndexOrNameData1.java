@@ -1,6 +1,6 @@
 package com.pig4cloud.plugin.excel.read;
 
-import com.alibaba.excel.annotation.ExcelProperty;
+import cn.idev.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 /**

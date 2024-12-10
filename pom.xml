@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pig4cloud.excel</groupId>
     <artifactId>excel-spring-boot-starter</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
     <name>excel-spring-boot-starter</name>
     <description>easy and high performance excel</description>
     <url>https://pig4cloud.com</url>
@@ -36,7 +36,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
-        <easyexcel.version>4.0.3</easyexcel.version>
+        <fastexcel.version>1.0.0</fastexcel.version>
         <mica.version>3.1.4</mica.version>
         <spring.checkstyle.plugin>0.0.43</spring.checkstyle.plugin>
         <git.commit.plugin>4.9.10</git.commit.plugin>
@@ -59,15 +59,19 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
-            <version>${easyexcel.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.commons</groupId>
-					<artifactId>commons-compress</artifactId>
-				</exclusion>
-			</exclusions>
+            <groupId>cn.idev.excel</groupId>
+            <artifactId>fastexcel</artifactId>
+            <version>${fastexcel.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-compress</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

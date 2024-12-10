@@ -1,6 +1,6 @@
 package com.pig4cloud.plugin.excel.read;
 
-import com.alibaba.excel.EasyExcel;
+import cn.idev.excel.EasyExcel;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
