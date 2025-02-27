@@ -4,7 +4,7 @@
 
 # Excel Spring Boot Starter
 
-`excel-spring-boot-starter` 是一个基于 `FastExcel` 实现的 Spring Boot Starter，用于简化 Excel 的读写操作。`FastExcel` 是一个 Java 开源项目，旨在以尽可能低的内存消耗实现对 Excel 文件的读写。通过 `EasyExcel`，你可以在仅使用 64M 内存的情况下，在 1 分钟内读取 75M（46 万行，25 列）的 Excel 文件。
+`excel-spring-boot-starter` 是一个基于 `FastExcel` 实现的 Spring Boot Starter，用于简化 Excel 的读写操作。`FastExcel` 是一个 Java 开源项目，旨在以尽可能低的内存消耗实现对 Excel 文件的读写。通过 `FastExcel`，你可以在仅使用 64M 内存的情况下，在 1 分钟内读取 75M（46 万行，25 列）的 Excel 文件。
 
 - 更多详细的使用说明，请参考文档：[https://www.yuque.com/pig4cloud/ogf9nv](https://www.yuque.com/pig4cloud/ogf9nv)
 
