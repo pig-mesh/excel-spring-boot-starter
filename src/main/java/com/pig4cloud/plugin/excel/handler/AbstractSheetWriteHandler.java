@@ -40,9 +40,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Modifier;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -77,7 +77,6 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 	}
 
 	@Override
-	@SneakyThrows(UnsupportedEncodingException.class)
 	public void export(Object o, HttpServletResponse response, ResponseExcel responseExcel) {
 		check(responseExcel);
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -86,7 +85,8 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 		if (name == null) {
 			name = UUID.randomUUID().toString();
 		}
-		String fileName = String.format("%s%s", URLEncoder.encode(name, "UTF-8"), responseExcel.suffix().getValue());
+		String fileName = String.format("%s%s", URLEncoder.encode(name, StandardCharsets.UTF_8),
+				responseExcel.suffix().getValue());
 		// 根据实际的文件类型找到对应的 contentType
 		String contentType = MediaTypeFactory.getMediaType(fileName)
 			.map(MediaType::toString)
@@ -122,7 +122,18 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 		}
 
 		if (responseExcel.include().length != 0) {
-			writerBuilder.includeColumnFieldNames(Arrays.asList(responseExcel.include()));
+			RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+			Object attribute = Objects.requireNonNull(requestAttributes)
+				.getAttribute(DynamicNameAspect.EXCEL_INCLUDES_KEY, RequestAttributes.SCOPE_REQUEST);
+
+			if (Objects.isNull(attribute)) {
+				writerBuilder.includeColumnFieldNames(Arrays.asList(responseExcel.include()));
+			}
+			else {
+				// 处理 include 字段的表达式
+				List<String> spelIncludes = (List<String>) attribute;
+				writerBuilder.includeColumnFieldNames(spelIncludes);
+			}
 		}
 
 		if (responseExcel.exclude().length != 0) {

@@ -16,7 +16,7 @@ public class IndexOrNameData2 {
 	/**
 	 * 读取第一列
 	 */
-	@ExcelProperty(value = "列1")
+	@ExcelProperty(value = "aa")
 	// 指定对应的枚举类 （字符串）
 	@DictTypeProperty(enums = SexEnum.class)
 	private String sex;

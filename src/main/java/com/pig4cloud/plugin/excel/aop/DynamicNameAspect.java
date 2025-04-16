@@ -12,7 +12,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author lengleng
@@ -23,6 +26,8 @@ import java.util.Objects;
 public class DynamicNameAspect {
 
 	public static final String EXCEL_NAME_KEY = "__EXCEL_NAME_KEY__";
+
+	public static final String EXCEL_INCLUDES_KEY = "__EXCEL_INCLUDES_KEY__";
 
 	private final NameProcessor processor;
 
@@ -41,6 +46,23 @@ public class DynamicNameAspect {
 
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 		Objects.requireNonNull(requestAttributes).setAttribute(EXCEL_NAME_KEY, name, RequestAttributes.SCOPE_REQUEST);
+
+		// 针对include 字段的表达式处理
+		if (excel.include().length == 1) {
+			String includeFields = processor.doDetermineName(point.getArgs(), ms.getMethod(), excel.include()[0]);
+
+			if (!StringUtils.hasText(includeFields)) {
+				return;
+			}
+
+			List<String> includes = Arrays.stream(includeFields.split(","))
+				.map(String::trim)
+				.filter(s -> !s.isEmpty())
+				.collect(Collectors.toList());
+			Objects.requireNonNull(requestAttributes)
+				.setAttribute(EXCEL_INCLUDES_KEY, includes, RequestAttributes.SCOPE_REQUEST);
+		}
+
 	}
 
 }

@@ -19,9 +19,9 @@ import java.util.List;
 @RequestMapping("/demo")
 public class DemoController {
 
-	@ResponseExcel
+	@ResponseExcel(include = "#str")
 	@RequestMapping("/test")
-	public List<IndexOrNameData2> test() {
+	public List<IndexOrNameData2> test(String str) {
 		List<IndexOrNameData2> list = new ArrayList<>();
 		IndexOrNameData2 indexOrNameData2 = new IndexOrNameData2();
 		indexOrNameData2.setSex("0");
