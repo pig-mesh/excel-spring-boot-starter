@@ -198,6 +198,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 		// 是否模板写入
 		ExcelWriterSheetBuilder writerSheetBuilder = StringUtils.hasText(template) ? EasyExcel.writerSheet(sheetNo)
 				: EasyExcel.writerSheet(sheetNo, sheetName);
+		if (StringUtils.hasText(template)) {
+			bookHeadEnhancerClass = null;
+		}
 
 		// 头信息增强 1. 优先使用 sheet 指定的头信息增强 2. 其次使用 @ResponseExcel 中定义的全局头信息增强
 		Class<? extends HeadGenerator> headGenerateClass = null;
@@ -212,7 +215,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 			fillCustomHeadInfo(dataClass, bookHeadEnhancerClass, writerSheetBuilder);
 		}
 		else if (dataClass != null) {
-			writerSheetBuilder.head(dataClass);
+			if (!StringUtils.hasText(template)) {
+				writerSheetBuilder.head(dataClass);
+			}
 			if (sheet.excludes().length > 0) {
 				writerSheetBuilder.excludeColumnFieldNames(Arrays.asList(sheet.excludes()));
 			}
