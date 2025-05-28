@@ -248,6 +248,9 @@ public abstract class AbstractSheetWriteHandler implements SheetWriteHandler, Ap
 	 * @return true 已指定 false 未指定(默认值)
 	 */
 	private boolean isNotInterface(Class<? extends HeadGenerator> headGeneratorClass) {
+		if (headGeneratorClass == null) {
+			return false;
+		}
 		return !Modifier.isInterface(headGeneratorClass.getModifiers());
 	}
 
