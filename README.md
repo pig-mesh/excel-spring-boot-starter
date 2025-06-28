@@ -1,8 +1,6 @@
-以下是基于你提供的内容生成的开源项目 `excel-spring-boot-starter` 的 README 示例：
-
----
-
 # Excel Spring Boot Starter
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.pig4cloud.excel/excel-spring-boot-starter.svg)](https://central.sonatype.com/artifact/com.pig4cloud.excel/excel-spring-boot-starter)
 
 `excel-spring-boot-starter` 是一个基于 `FastExcel` 实现的 Spring Boot Starter，用于简化 Excel 的读写操作。`FastExcel` 是一个 Java 开源项目，旨在以尽可能低的内存消耗实现对 Excel 文件的读写。通过 `FastExcel`，你可以在仅使用 64M 内存的情况下，在 1 分钟内读取 75M（46 万行，25 列）的 Excel 文件。
 
@@ -20,7 +18,7 @@
 
 | 版本    | 支持版本            |
 |-------|-------------------|
-| 3.4.1 | 适配 Spring Boot 3.x |
+| 3.4.2 | 适配 Spring Boot 3.x |
 | 1.2.7 | 适配 Spring Boot 2.x |
 
 在 `pom.xml` 中添加以下依赖：

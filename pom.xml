@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pig4cloud.excel</groupId>
     <artifactId>excel-spring-boot-starter</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
     <name>excel-spring-boot-starter</name>
     <description>easy and high performance excel</description>
     <url>https://pig4cloud.com</url>
@@ -36,7 +36,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
-        <fastexcel.version>1.1.0</fastexcel.version>
+        <fastexcel.version>1.2.0</fastexcel.version>
         <mica.version>3.1.4</mica.version>
         <spring.checkstyle.plugin>0.0.43</spring.checkstyle.plugin>
         <git.commit.plugin>4.9.10</git.commit.plugin>
