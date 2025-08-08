@@ -20,6 +20,8 @@ public class IndexOrNameData3 {
 	@ExcelProperty(value = "列1")
 	@DictTypeProperty("sex_txype")
 	private String sex;
+
 	@ExcelLine
 	private Long lineNum;
+
 }
