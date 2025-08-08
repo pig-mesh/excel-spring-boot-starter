@@ -6,8 +6,8 @@ import com.pig4cloud.plugin.excel.kit.Validators;
 import com.pig4cloud.plugin.excel.vo.ErrorMessage;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,18 +41,16 @@ public class DefaultAnalysisEventListener extends ListAnalysisEventListener<Obje
 			errorMessageList.add(new ErrorMessage(lineNum, messageSet));
 		}
 		else {
-			Field[] fields = o.getClass().getDeclaredFields();
-			for (Field field : fields) {
+			// 获取所有的字段
+			ReflectionUtils.doWithFields(o.getClass(), field -> {
+				// 如果字段上有 @ExcelLine 注解，并且类型为 Long，则设置行号
 				if (field.isAnnotationPresent(ExcelLine.class) && field.getType() == Long.class) {
-					try {
-						field.setAccessible(true);
-						field.set(o, lineNum);
-					}
-					catch (IllegalAccessException e) {
-						e.printStackTrace();
-					}
+					// 设置字段可访问
+					ReflectionUtils.makeAccessible(field);
+					// 设置字段值
+					field.set(o, lineNum);
 				}
-			}
+			});
 			list.add(o);
 		}
 	}

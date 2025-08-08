@@ -2,6 +2,7 @@ package com.pig4cloud.plugin.excel.enums;
 
 import cn.idev.excel.annotation.ExcelProperty;
 import com.pig4cloud.plugin.excel.annotation.DictTypeProperty;
+import com.pig4cloud.plugin.excel.annotation.ExcelLine;
 import lombok.Data;
 
 /**
@@ -19,5 +20,6 @@ public class IndexOrNameData3 {
 	@ExcelProperty(value = "列1")
 	@DictTypeProperty("sex_txype")
 	private String sex;
-
+	@ExcelLine
+	private Long lineNum;
 }
