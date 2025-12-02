@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pig4cloud.excel</groupId>
     <artifactId>excel-spring-boot-starter</artifactId>
-    <version>3.4.2</version>
+    <version>3.4.3</version>
     <name>excel-spring-boot-starter</name>
     <description>easy and high performance excel</description>
     <url>https://pig4cloud.com</url>
