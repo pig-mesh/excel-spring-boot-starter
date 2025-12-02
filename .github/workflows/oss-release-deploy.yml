@@ -23,7 +23,7 @@ jobs:
         with: # overwrite settings.xml
           java-version: '17'
           distribution: 'adopt'
-          server-id: sonatype
+          server-id: center
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_KEY }}
@@ -33,8 +33,8 @@ jobs:
         run:  mvn clean deploy -P release -Dmaven.test.skip=true
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          OSSRH_USERNAME: ${{ secrets.CENTER_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.CENTER_PASSWORD }}
 
   publish-github-release:
     needs: oss-release-deploy
