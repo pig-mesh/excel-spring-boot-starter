@@ -18,23 +18,22 @@ class MockDataTest {
 
 	private static final int TOTAL_COUNT = 1000000;
 
-	private static final String[] FIRST_NAMES = { "张", "李", "王", "刘", "陈", "杨", "赵", "黄", "周", "吴", "徐", "孙",
-			"胡", "朱", "高", "林", "何", "郭", "马", "罗" };
+	private static final String[] FIRST_NAMES = { "张", "李", "王", "刘", "陈", "杨", "赵", "黄", "周", "吴", "徐", "孙", "胡", "朱",
+			"高", "林", "何", "郭", "马", "罗" };
 
-	private static final String[] LAST_NAMES = { "伟", "芳", "娜", "秀英", "敏", "静", "丽", "强", "磊", "军", "洋", "勇",
-			"艳", "杰", "涛", "明", "超", "秀兰", "霞", "平", "刚", "桂英" };
+	private static final String[] LAST_NAMES = { "伟", "芳", "娜", "秀英", "敏", "静", "丽", "强", "磊", "军", "洋", "勇", "艳", "杰",
+			"涛", "明", "超", "秀兰", "霞", "平", "刚", "桂英" };
 
-	private static final String[] DEPARTMENTS = { "技术部", "产品部", "运营部", "市场部", "人力资源部", "财务部", "销售部", "客服部",
-			"设计部", "行政部" };
+	private static final String[] DEPARTMENTS = { "技术部", "产品部", "运营部", "市场部", "人力资源部", "财务部", "销售部", "客服部", "设计部",
+			"行政部" };
 
 	private static final String[] CITIES = { "北京", "上海", "广州", "深圳", "杭州", "南京", "成都", "武汉", "西安", "重庆" };
 
-	private static final String[] DISTRICTS = { "朝阳区", "海淀区", "浦东新区", "天河区", "南山区", "西湖区", "江宁区", "武侯区",
-			"雁塔区", "渝北区" };
+	private static final String[] DISTRICTS = { "朝阳区", "海淀区", "浦东新区", "天河区", "南山区", "西湖区", "江宁区", "武侯区", "雁塔区", "渝北区" };
 
 	private final Random random = new Random();
 
-//	@Test
+	// @Test
 	void generateMockData() {
 		String fileName = System.getProperty("user.home") + File.separator + "mock_data_1000000.xlsx";
 
@@ -107,9 +106,9 @@ class MockDataTest {
 	 * 生成随机手机号
 	 */
 	private String generateRandomPhone() {
-		String[] prefixes = { "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "150", "151",
-				"152", "153", "155", "156", "157", "158", "159", "180", "181", "182", "183", "185", "186", "187",
-				"188", "189" };
+		String[] prefixes = { "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "150", "151", "152",
+				"153", "155", "156", "157", "158", "159", "180", "181", "182", "183", "185", "186", "187", "188",
+				"189" };
 		String prefix = prefixes[random.nextInt(prefixes.length)];
 		StringBuilder phone = new StringBuilder(prefix);
 		for (int i = 0; i < 8; i++) {
